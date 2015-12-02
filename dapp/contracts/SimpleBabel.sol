@@ -8,7 +8,7 @@ contract SimpleBabel is named("SimpleBabel") {
         uint256 value;
     }
     
-    Brick[] bricks;
+    Brick[] public bricks;
     
     uint256 public base = 100 finney; // 0.1 ether
     uint256 public rate = 10 finney; // 0.01 ether
@@ -34,5 +34,9 @@ contract SimpleBabel is named("SimpleBabel") {
     
     function calculateFee(uint256 size) returns (uint256 fee) {
         fee = base + rate * size;
+    }
+    
+    function height() returns (uint256 height) {
+        height = bricks.length;
     }
 }
