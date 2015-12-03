@@ -5,17 +5,19 @@ contract RandomBabel is named("RandomBabel") {
     struct Brick {
         address from;
         // string message;
-        uint32 value;
-        int32  offset;
+        uint    value;
+        int32   offset;
     }
     
     Brick[] public bricks;
     int32   public brickD;
     int32          brickR;
     
-    uint256 public count;
+    uint    public count;
     
-    event AddBrick(address indexed from, uint256 indexed height, uint256 indexed count, int32 offset);
+    event AddBrick(address indexed from, uint indexed height, uint indexed count, int32 offset);
+    event Collapse(uint indexed collapsedAt);
+    event Dividend();
     
     // function RandomBabel(uint64 _brickWidth) {
     //     brickWidth = _brickWidth;
@@ -36,12 +38,58 @@ contract RandomBabel is named("RandomBabel") {
         bricks.push(Brick(msg.sender, 1, offset));
         
         AddBrick(msg.sender, bricks.length, count, offset);
+        
+        settle();
+    }
+    
+    function settle() internal {
+        int32 offset = 0;
+        uint top = bricks.length - 1;
+        uint collapsed_at = top;
+        
+
+        for(uint i = top; i > 0; i--) { // block at 0 never collapse
+            var brick = bricks[i];
+            
+            if (i == top) {
+                offset = brick.offset;
+            } else {
+                if (abs(offset - brick.offset) > brickR) {
+                    collapsed_at = i;
+                    break;
+                } else {
+                    offset = int32((int(offset)*int(i) + int(brick.offset)) / int(i+1)); // possible overflow!
+                }
+            }
+        }
+        
+        if(collapsed_at < top) {
+            collapse(collapsed_at);
+        } else {
+            dividend();
+        }
+    }
+    
+    function collapse(uint i) internal {
+        Collapse(i);
+    }
+    
+    function dividend() internal {
+        Dividend();
     }
     
     // todo: take last 10 blockhash?
     function randOffset(int32 base) returns (int32 offset) {
         var lastHash = block.blockhash(block.number-1);
         offset = base + int32(lastHash) % brickR;
+    }
+    
+    function abs(int32 x) internal returns (int32 y) {
+        if (x > 0 ) {
+            y = x;
+        } else {
+            y = -x;
+        }
     }
     
     function () { // prevent accidental tx
