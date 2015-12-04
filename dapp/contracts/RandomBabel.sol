@@ -46,10 +46,10 @@ contract RandomBabel is named("RandomBabel") {
         
         AddBrick(msg.sender, bricks.length, count, offset);
         
-        settle();
+        collapseCheck();
     }
     
-    function settle() internal {
+    function collapseCheck() internal {
         int32 offset = 0;
         uint top = bricks.length - 1;
         uint collapsed_at = top;
@@ -87,6 +87,7 @@ contract RandomBabel is named("RandomBabel") {
         accounts[receiver] = amount;
 
         bricks.length = i+1; // make i the top brick
+        top18();
         
         Collapse(i, receiver, amount);
     }
@@ -97,7 +98,6 @@ contract RandomBabel is named("RandomBabel") {
         uint remnant = 0;
         uint top = bricks.length - 1;
         
-        uint[18] memory values;
         for(uint i=0; i < accumCount; i++) {
             if (top < i) {
                 break; // should never happen
@@ -116,11 +116,19 @@ contract RandomBabel is named("RandomBabel") {
                     remnant -= keep;
                 } 
             }
-            values[i] = brick.value;
         }
         
-        Top18(values);
+        top18();
         Accumulate(i);
+    }
+    
+    function top18() {
+        uint[18] memory values;
+        for(uint i=0; i<accumCount && i<bricks.length; i++) {
+            var brick = bricks[bricks.length-1-i];
+            values[i] = brick.value;
+        }
+        Top18(values);
     }
     
     // todo: take last 10 blockhash?
