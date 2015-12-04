@@ -1,6 +1,6 @@
 import "std.sol";
 
-contract RandomBabel is named("RandomBabel") {
+contract RandomBabel is mortal, named("RandomBabel") {
     
     struct Brick {
         uint    id;
