@@ -18,14 +18,15 @@ contract RandomBabel is named("RandomBabel") {
     uint    public count;
     uint    public accumCount;
     
-    uint    public cashOutThreshold;
+    uint    public clearThreshold;
     
     mapping(address => uint) accounts;
     
     event AddBrick(uint indexed id, address indexed from, uint indexed height, int32 offset);
-    event CashOut(uint indexed id, address indexed receiver, uint indexed amount);
     event Collapse(uint indexed id, uint indexed collapsedAt, address indexed account, uint amount, uint height);
     event Accumulate(uint indexed count);
+    event Clearing(uint indexed id, address indexed receiver, uint indexed amount);
+    event Withdraw(address indexed receiver, uint indexed amount);
     event Top18(uint[18] values); //, uint t5, uint t6, uint t7, uint t8, uint t9);
     
     // function RandomBabel(uint64 _brickWidth) {
@@ -40,34 +41,21 @@ contract RandomBabel is named("RandomBabel") {
         
         count = 1;
         accumCount = 9;
-        cashOutThreshold = 10;
+        clearThreshold = 10;
         
-        if(cashOutThreshold < accumCount) {
-            throw; // otherwise someone may not be able to cashout
+        if(clearThreshold < accumCount) {
+            throw; // otherwise someone may not be able to clear
         }
     }
     
-    function addBrick() {
+    function addBrick() external {
         var offset = randOffset(bricks[bricks.length-1].offset);
         bricks.push(Brick(count, msg.sender, brickV, offset));
         
         AddBrick(count, msg.sender, bricks.length, offset);
         count += 1;
         
-        cashOutCheck();
         collapseCheck();
-    }
-    
-    function cashOutCheck() internal {
-        if(bricks.length > cashOutThreshold) {
-            var brick = bricks[bricks.length - 1 - cashOutThreshold];
-            if (brick.value > 1) {
-                var amount = brick.value - 1;
-                accounts[brick.from] += amount;
-                brick.value = 1;
-                CashOut(brick.id, brick.from, amount);
-            }
-        }
     }
     
     function collapseCheck() internal {
@@ -139,6 +127,32 @@ contract RandomBabel is named("RandomBabel") {
         
         top18();
         Accumulate(i);
+        
+        clear();
+    }
+        
+    function clear() internal {
+        if(bricks.length > clearThreshold) {
+            var brick = bricks[bricks.length - 1 - clearThreshold];
+            if (brick.value > 1) {
+                var amount = brick.value - 1;
+                accounts[brick.from] += amount;
+                brick.value = 1;
+                Clearing(brick.id, brick.from, amount);
+            }
+            
+            withdraw();
+        }
+    }
+    
+    function withdraw() internal {
+        var receiver = msg.sender;
+        if (accounts[receiver] > 0) {
+            Withdraw(receiver, accounts[receiver]);
+            
+            receiver.send(accounts[receiver]);
+            accounts[receiver] = 0;
+        }
     }
     
     function top18() {
