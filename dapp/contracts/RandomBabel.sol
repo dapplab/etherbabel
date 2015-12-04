@@ -160,10 +160,10 @@ contract RandomBabel is mortal, named("RandomBabel") {
         Top18(values);
     }
     
-    // todo: take last 10 blockhash?
     function randOffset(int32 base) internal returns (int32 offset) {
-        var lastHash = block.blockhash(block.number-1);
-        offset = base + int32(lastHash) % brickR;
+        bytes32 lastHash = block.blockhash(block.number-1);
+        int32 rand = int32(sha256(uint256(lastHash) + count));
+        offset = base + rand % brickR;
     }
     
     function abs(int32 x) internal returns (int32 y) {
