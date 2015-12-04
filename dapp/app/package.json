@@ -1,0 +1,20 @@
+{
+  "name": "etherbabel",
+  "version": "0.1.0",
+  "description": "Babel the tower, on ethereum.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dapplab/etherbabel.git"
+  },
+  "homepage": "https://github.com/dapplab/etherbabel",
+  "author": "Jan Xie",
+  "license": "MIT",
+  "scripts": {
+    "start": "webpack-dev-server --config webpack.dev.js --progress --colors",
+    "build": "webpack --progress --colors -p"
+  },
+  "devDependencies": {
+    "web3": "^0.15.1",
+    "webpack": "^1.12.9"
+  }
+}
