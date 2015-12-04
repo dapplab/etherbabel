@@ -12,32 +12,37 @@ contract RandomBabel is named("RandomBabel") {
     Brick[] public bricks;
     int32   public brickD;
     int32          brickR;
+    uint    public brickV;
     
     uint    public count;
+    uint    public accumCount;
     
     mapping(address => uint) accounts;
     
     event AddBrick(address indexed from, uint indexed height, uint indexed count, int32 offset);
     event Collapse(uint indexed collapsedAt, address indexed account, uint indexed amount);
-    event Dividend();
+    event Accumulate(uint indexed count);
+    event Top18(uint[18] values); //, uint t5, uint t6, uint t7, uint t8, uint t9);
     
     // function RandomBabel(uint64 _brickWidth) {
     //     brickWidth = _brickWidth;
     // }
     
     function RandomBabel() {
+        brickV = 1 ether;
         brickD = 101;
         brickR = brickD / 2;
-        
         bricks.push(Brick(0, 0, 0)); // default first brick. should we set address other than 0?
+        
         count = 1;
+        accumCount = 18;
     }
     
     function addBrick() {
         count += 1;
         
         var offset = randOffset(bricks[bricks.length-1].offset);
-        bricks.push(Brick(msg.sender, 1, offset));
+        bricks.push(Brick(msg.sender, brickV, offset));
         
         AddBrick(msg.sender, bricks.length, count, offset);
         
@@ -68,7 +73,7 @@ contract RandomBabel is named("RandomBabel") {
         if(collapsed_at < top) {
             collapse(collapsed_at);
         } else {
-            dividend();
+            accumulate();
         }
     }
     
@@ -86,8 +91,36 @@ contract RandomBabel is named("RandomBabel") {
         Collapse(i, receiver, amount);
     }
     
-    function dividend() internal {
-        Dividend();
+    // distribute value of top brick to lower bricks
+    function accumulate() internal {
+        uint keep = 0;
+        uint remnant = 0;
+        uint top = bricks.length - 1;
+        
+        uint[18] memory values;
+        for(uint i=0; i < accumCount; i++) {
+            if (top < i) {
+                break; // should never happen
+            }
+            
+            var brick = bricks[top-i];
+            if (top == i) { // when we're at bottom
+                brick.value += remnant;
+            } else {
+                if (i == 0) { // clear top brick
+                    remnant = brick.value;
+                    brick.value = 0;
+                } else { // keep half, pass on half
+                    keep = remnant / 2;
+                    brick.value += keep;
+                    remnant -= keep;
+                } 
+            }
+            values[i] = brick.value;
+        }
+        
+        Top18(values);
+        Accumulate(i);
     }
     
     // todo: take last 10 blockhash?
