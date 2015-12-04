@@ -33,7 +33,7 @@ contract RandomBabel is mortal, named("RandomBabel") {
         brickV = 1 ether;
         brickD = 1001;
         brickR = brickD / 2;
-        bricks.push(Brick(0, 0, 0, 0)); // default first brick. should we set address other than 0?
+        bricks.push(Brick(0, msg.sender, 0, 0)); // default first brick, never collapse
         
         count = 1;
         accumCount = 9;
