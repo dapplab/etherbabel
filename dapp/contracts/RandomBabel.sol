@@ -15,8 +15,10 @@ contract RandomBabel is named("RandomBabel") {
     
     uint    public count;
     
+    mapping(address => uint) accounts;
+    
     event AddBrick(address indexed from, uint indexed height, uint indexed count, int32 offset);
-    event Collapse(uint indexed collapsedAt);
+    event Collapse(uint indexed collapsedAt, address indexed account, uint indexed amount);
     event Dividend();
     
     // function RandomBabel(uint64 _brickWidth) {
@@ -71,7 +73,17 @@ contract RandomBabel is named("RandomBabel") {
     }
     
     function collapse(uint i) internal {
-        Collapse(i);
+        address receiver = bricks[bricks.length-1].from;
+        
+        uint amount;
+        for(uint j = i+1; j < bricks.length; j++) {
+            amount += bricks[j].value;
+        }
+        accounts[receiver] = amount;
+
+        bricks.length = i+1; // make i the top brick
+        
+        Collapse(i, receiver, amount);
     }
     
     function dividend() internal {
