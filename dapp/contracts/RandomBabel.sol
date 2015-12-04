@@ -27,15 +27,11 @@ contract RandomBabel is mortal, named("RandomBabel") {
     event Accumulate(uint indexed count);
     event Clearing(uint indexed id, address indexed receiver, uint indexed amount);
     event Withdraw(address indexed receiver, uint indexed amount);
-    event Top18(uint[18] values); //, uint t5, uint t6, uint t7, uint t8, uint t9);
-    
-    // function RandomBabel(uint64 _brickWidth) {
-    //     brickWidth = _brickWidth;
-    // }
+    event Top18(uint[18] values);
     
     function RandomBabel() {
         brickV = 1 ether;
-        brickD = 101;
+        brickD = 1001;
         brickR = brickD / 2;
         bricks.push(Brick(0, 0, 0, 0)); // default first brick. should we set address other than 0?
         
@@ -98,7 +94,7 @@ contract RandomBabel is mortal, named("RandomBabel") {
         Collapse(top.id, i, top.from, amount, bricks.length);
         
         bricks.length = i+1; // make i the top brick
-        top18();
+        // top18();
     }
     
     // distribute value of top brick to lower bricks
@@ -125,7 +121,7 @@ contract RandomBabel is mortal, named("RandomBabel") {
             }
         }
         
-        top18();
+        // top18();
         Accumulate(i);
         
         clear();
@@ -134,10 +130,10 @@ contract RandomBabel is mortal, named("RandomBabel") {
     function clear() internal {
         if(bricks.length > clearThreshold) {
             var brick = bricks[bricks.length - 1 - clearThreshold];
-            if (brick.value > 1) {
-                var amount = brick.value - 1;
+            if (brick.value > 1 ether) {
+                var amount = brick.value - 1 ether;
                 accounts[brick.from] += amount;
-                brick.value = 1;
+                brick.value = 1 ether;
                 Clearing(brick.id, brick.from, amount);
             }
             
