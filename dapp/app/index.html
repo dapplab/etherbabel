@@ -10,14 +10,7 @@
 
 <body>
     <button id='add-brick'>Add Brick</button>
-    <script type="text/javascript">
-        var sandboxId = "28c3b3d7c2438d2e30b63dee3c70d34e390131a8";
-        var Web3 = require('web3');
-        var web3 = new Web3();
-        web3.setProvider(new web3.providers.HttpProvider("http://babel.on.ether.camp:8555/sandbox/" + sandboxId));
-
-        console.log(web3.eth.coinbase);
-    </script>
+    <div id='canvas'></div>
 </body>
 
 </html>

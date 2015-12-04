@@ -1,6 +1,6 @@
 import "std.sol";
 
-contract RandomBabel is mortal, named("RandomBabel") {
+contract Babel is mortal, named("Babel") {
     
     struct Brick {
         uint    id;
@@ -29,7 +29,7 @@ contract RandomBabel is mortal, named("RandomBabel") {
     event Withdraw(address indexed receiver, uint indexed amount);
     event Top18(uint[18] values);
     
-    function RandomBabel() {
+    function Babel() {
         brickV = 1 ether;
         brickD = 1001;
         brickR = brickD / 2;
