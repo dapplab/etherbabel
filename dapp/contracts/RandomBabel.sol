@@ -3,6 +3,7 @@ import "std.sol";
 contract RandomBabel is named("RandomBabel") {
     
     struct Brick {
+        uint    id;
         address from;
         // string message;
         uint    value;
@@ -17,10 +18,13 @@ contract RandomBabel is named("RandomBabel") {
     uint    public count;
     uint    public accumCount;
     
+    uint    public cashOutThreshold;
+    
     mapping(address => uint) accounts;
     
-    event AddBrick(address indexed from, uint indexed height, uint indexed count, int32 offset);
-    event Collapse(uint indexed collapsedAt, address indexed account, uint indexed amount);
+    event AddBrick(uint indexed id, address indexed from, uint indexed height, int32 offset);
+    event CashOut(uint indexed id, address indexed receiver, uint indexed amount);
+    event Collapse(uint indexed id, uint indexed collapsedAt, address indexed account, uint amount, uint height);
     event Accumulate(uint indexed count);
     event Top18(uint[18] values); //, uint t5, uint t6, uint t7, uint t8, uint t9);
     
@@ -32,21 +36,38 @@ contract RandomBabel is named("RandomBabel") {
         brickV = 1 ether;
         brickD = 101;
         brickR = brickD / 2;
-        bricks.push(Brick(0, 0, 0)); // default first brick. should we set address other than 0?
+        bricks.push(Brick(0, 0, 0, 0)); // default first brick. should we set address other than 0?
         
         count = 1;
-        accumCount = 18;
+        accumCount = 9;
+        cashOutThreshold = 10;
+        
+        if(cashOutThreshold < accumCount) {
+            throw; // otherwise someone may not be able to cashout
+        }
     }
     
     function addBrick() {
+        var offset = randOffset(bricks[bricks.length-1].offset);
+        bricks.push(Brick(count, msg.sender, brickV, offset));
+        
+        AddBrick(count, msg.sender, bricks.length, offset);
         count += 1;
         
-        var offset = randOffset(bricks[bricks.length-1].offset);
-        bricks.push(Brick(msg.sender, brickV, offset));
-        
-        AddBrick(msg.sender, bricks.length, count, offset);
-        
+        cashOutCheck();
         collapseCheck();
+    }
+    
+    function cashOutCheck() internal {
+        if(bricks.length > cashOutThreshold) {
+            var brick = bricks[bricks.length - 1 - cashOutThreshold];
+            if (brick.value > 1) {
+                var amount = brick.value - 1;
+                accounts[brick.from] += amount;
+                brick.value = 1;
+                CashOut(brick.id, brick.from, amount);
+            }
+        }
     }
     
     function collapseCheck() internal {
@@ -78,18 +99,18 @@ contract RandomBabel is named("RandomBabel") {
     }
     
     function collapse(uint i) internal {
-        address receiver = bricks[bricks.length-1].from;
+        var top = bricks[bricks.length-1];
         
         uint amount;
         for(uint j = i+1; j < bricks.length; j++) {
             amount += bricks[j].value;
         }
-        accounts[receiver] = amount;
+        accounts[top.from] += amount;
 
+        Collapse(top.id, i, top.from, amount, bricks.length);
+        
         bricks.length = i+1; // make i the top brick
         top18();
-        
-        Collapse(i, receiver, amount);
     }
     
     // distribute value of top brick to lower bricks
@@ -99,9 +120,7 @@ contract RandomBabel is named("RandomBabel") {
         uint top = bricks.length - 1;
         
         for(uint i=0; i < accumCount; i++) {
-            if (top < i) {
-                break; // should never happen
-            }
+            if (top < i) break;
             
             var brick = bricks[top-i];
             if (top == i) { // when we're at bottom
@@ -132,7 +151,7 @@ contract RandomBabel is named("RandomBabel") {
     }
     
     // todo: take last 10 blockhash?
-    function randOffset(int32 base) returns (int32 offset) {
+    function randOffset(int32 base) internal returns (int32 offset) {
         var lastHash = block.blockhash(block.number-1);
         offset = base + int32(lastHash) % brickR;
     }
