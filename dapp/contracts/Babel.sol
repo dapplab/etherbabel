@@ -19,6 +19,7 @@ contract Babel is mortal, named("Babel") {
     uint    public accumCount;
     
     uint    public clearThreshold;
+    int32   public stablizer;
     
     mapping(address => uint) accounts;
     
@@ -31,20 +32,21 @@ contract Babel is mortal, named("Babel") {
     
     function Babel() {
         brickV = 1 ether;
-        brickD = 1001;
+        brickD = 2**30;
         brickR = brickD / 2;
         bricks.push(Brick(0, msg.sender, 0, 0)); // default first brick, never collapse
         
         count = 1;
         accumCount = 9;
         clearThreshold = 10;
+        stablizer = 50;
         
         if(clearThreshold < accumCount) {
             throw; // otherwise someone may not be able to clear
         }
     }
     
-    function addBrick() external {
+    function addBrick() external check_deposit {
         var offset = randOffset(bricks[bricks.length-1].offset);
         bricks.push(Brick(count, msg.sender, brickV, offset));
         
@@ -158,8 +160,8 @@ contract Babel is mortal, named("Babel") {
     
     function randOffset(int32 base) internal returns (int32 offset) {
         bytes32 lastHash = block.blockhash(block.number-1);
-        int32 rand = int32(sha256(uint256(lastHash) + count));
-        offset = base + rand % brickR;
+        int32 rand = int32(sha256(lastHash, tx.origin, count));
+        offset = base + (stablizer * (rand % brickR) / 100);
     }
     
     function abs(int32 x) internal returns (int32 y) {
@@ -169,6 +171,31 @@ contract Babel is mortal, named("Babel") {
             y = -x;
         }
     }
+    
+    modifier check_deposit {
+        var rvalue = uint256(0);
+        if(msg.value < 1 ether) {
+            rvalue = msg.value;
+        } else {
+            rvalue = msg.value - 1 ether;
+            _
+        }
+
+        refund(rvalue);
+    }  
+    
+    function refund (uint rvalue) private {
+        if(rvalue > txfee()){
+            tx.origin.send(rvalue - txfee());
+        }
+    }
+
+    function txfee () private returns (uint96 fee) {
+        return uint96(100 * tx.gasprice);
+    }
+
+
+
     
     function () { // prevent accidental tx
         throw;
