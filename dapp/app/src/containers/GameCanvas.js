@@ -111,7 +111,7 @@ export default class GameCanvas extends React.Component {
   }
 
   formatBrick(brick) {
-    if ($.isArray(brick)) { // Init
+    if (Array.isArray(brick)) { // Init
         return {
             id: brick[0].toString(),
             from: brick[1],
