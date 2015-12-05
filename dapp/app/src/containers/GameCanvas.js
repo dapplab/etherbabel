@@ -66,7 +66,7 @@ function setupBabel(web3, address, abi) {
     return babel;
 }
 
-var sandboxId = "8ff32c3ea555ff03ad973175d832279cd3cf8fa5";
+var sandboxId = "b18d1fe606e60d06830de19157999f8a395d7279";
 var babelAddress = '0x17956ba5f4291844bc25aedb27e69bc11b5bda39';
 var gamerAddress = '0xdedb49385ad5b94a16f236a6890cf9e0b1e30392';
 
@@ -90,17 +90,26 @@ var brickR = brickD / 2;
 
 var centralBrickLeft = canvasWidth/2 - brickWidth/2;
 
+window.web3 = web3;
+window.babel = babel;
+var coinbase = web3.eth.coinbase;
+
 export default class GameCanvas extends React.Component {
 
   constructor() {
     super();
-    this.state = { bricks: [] };
+    this.state = { bricks: [], celebrate: false };
+  }
+
+  donatedByU(brickFrom) {
+    console.log('brickFrom', brickFrom);
+    return brickFrom === coinbase
   }
 
   collapse(obj) {
     let bricks = this.state.bricks.slice(0, obj.collapsedAt+1);
-    this.setState({ bricks: bricks });
-    console.log("Collapsed!", obj);
+    this.setState({ bricks: bricks, celebrate: this.donatedByU(obj.account) });
+    console.log("Collapsed!", this.donatedByU(obj.account), obj);
   }
 
   addBrick(brick) {
@@ -116,14 +125,16 @@ export default class GameCanvas extends React.Component {
             id: brick[0].toString(),
             from: brick[1],
             value: brick[2].toString(),
-            offset: brick[3].toString()
+            offset: brick[3].toString(),
+            donated: this.donatedByU(brick[1])
         }
     } else { // Event
         return {
             id: brick.id.toString(),
             from: brick.from,
             height: brick.height.toString(),
-            offset: brick.offset.toString()
+            offset: brick.offset.toString(),
+            donated: this.donatedByU(brick.from)
         };
     }
   }
@@ -209,8 +220,10 @@ export default class GameCanvas extends React.Component {
   renderBrick(brick, i) {
     let left = centralBrickLeft + brickHalfWidth * brick.offset / brickR;
     let bottom = i*brickFullHeight;
+    let className = 'brick';
+    if(brick.donated){ className = 'brick donated' }
     return (
-      <div className="brick" key={brick.id} style={ { bottom: bottom, left: left } } data-offset={brick.offset} data-level={i} >{brick.id}</div>
+      <div className={className} key={brick.id} style={ { bottom: bottom, left: left } } data-offset={brick.offset} data-level={i} >{brick.id}</div>
     )
   }
 
