@@ -7,6 +7,10 @@ var brickWidth = 120;
 var brickHeight = 30;
 var brickBorder = 1;
 var brickFullHeight = brickHeight + brickBorder*2;
+var brickHalfWidth = brickWidth / 2;
+
+var brickD = 1001;
+var brickR = brickD / 2;
 
 var centralBrickLeft = canvasWidth/2 - brickWidth/2;
 
@@ -34,7 +38,7 @@ function clearCanvas() {
 }
 
 function addBrickToCanvas(level, brick) {
-    $('#canvas').append('<div class="brick" data-level="'+ level + '">' + level + '</div>');
+    $('#canvas').append('<div class="brick" data-offset="' + brick.offset + '" data-level="'+ level + '">' + level + '</div>');
 }
 
 function renderDemo(bricks) {
@@ -43,8 +47,10 @@ function renderDemo(bricks) {
 
     $('#canvas .brick').each(function(i, el) {
         var level = $(el).data('level');
+        var offset = parseInt($(el).data('offset'));
+        var left = centralBrickLeft + brickHalfWidth * offset / brickR;
         $(el).css('bottom', level*brickFullHeight);
-        $(el).css('left', centralBrickLeft);
+        $(el).css('left', left);
     });
 }
 
