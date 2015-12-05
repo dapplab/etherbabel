@@ -4,7 +4,6 @@ import createBrowserHistory   from 'history/lib/createBrowserHistory';
 import { syncReduxAndRouter } from 'redux-simple-router';
 import Root                   from './containers/Root';
 import configureStore         from './store/configureStore';
-import Web3                   from 'web3';
 
 const target  = document.getElementById('root');
 const history = createBrowserHistory();

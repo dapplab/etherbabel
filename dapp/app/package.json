@@ -42,7 +42,8 @@
     "yargs": "^3.18.0",
     "matter-js": "^0.8.0",
     "web3": "^0.15.0",
-    "json-loader": "^0.5.4"
+    "json-loader": "^0.5.4",
+    "jquery": "^2.1.4"
   },
   "devDependencies": {
     "autoprefixer": "^6.0.3",
