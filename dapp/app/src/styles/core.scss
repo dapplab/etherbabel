@@ -1,2 +1,17 @@
 @import 'base';
 @import 'vendor/normalize';
+
+body {
+
+}
+#canvas-container {
+  max-height: 750px;
+  max-width: 750px;
+  overflow: auto;
+  margin: 0 auto;
+  box-shadow: 0 1px 15px 1px rgba(0,0,0,.5);
+  canvas {
+    background: url(../images/house.png) center bottom no-repeat,
+                url(../images/bg.png) 0 0 repeat !important;
+  }
+}

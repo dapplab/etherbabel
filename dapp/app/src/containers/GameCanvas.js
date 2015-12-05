@@ -7,106 +7,77 @@ import brickStyle3        from '../images/style3.png';
 import brickStyle4        from '../images/style4.png';
 import brickStyle5        from '../images/style5.png';
 
-var Engine = Matter.Engine,
+let Engine = Matter.Engine,
     World = Matter.World,
     Bodies = Matter.Bodies,
     Body = Matter.Body,
     Common = Matter.Common,
     Constraint = Matter.Constraint,
-    Events = Matter.Events;
+    Events = Matter.Events,
+    babelLevel = 0,
+    isDropping = false;
 
-    console.log(Body, World, engine);
-    // create a Matter.js engine
-    var engine = Engine.create(document.body);
-    var renderOptions = engine.render.options;
-        renderOptions.wireframes = false;
+// create a Matter.js engine
+let engine = Engine.create(document.getElementById('canvas-container'));
+let renderOptions = engine.render.options;
+    renderOptions.wireframes = false;
+    engine.render.canvas.width = 750;
+    engine.render.canvas.height = 1800;
+let ground = Bodies.rectangle(375, 1810, 760, 120, { isStatic: true, render: { visible: false } });
 
-    // create two boxes and a ground
-    var boxA = Bodies.rectangle(100, 20, 80, 80);
-    var boxB = Bodies.rectangle(100, 50, 80, 80);
-    var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true, friction: 1 });
+World.add(engine.world, [
+  ground
+]);
 
-    // add all of the bodies to the world
-    // World.add(engine.world, [boxA, boxB, ground]);
-
-    var offset = 5;
-    World.add(engine.world, [
-        // Bodies.rectangle(290, 455, 100, 20, { isStatic: true, friction: 1 }),
-        // Bodies.rectangle(300, 475, 100, 20, { isStatic: true, friction: 1 }),
-        // Bodies.rectangle(300 - offset*2, 495, 100, 20, { isStatic: true, friction: 1 }),
-        // Bodies.rectangle(300 + offset*5, 515, 100, 20, { isStatic: true, friction: 1 }),
-        // Bodies.rectangle(100, 100 + offset, 100.5 + 2 * offset, 50.5),
-        // Bodies.rectangle(100 + offset, 100, 50.5, 600.5 + 2 * offset),
-        // Bodies.rectangle(-offset, 100, 50.5, 100.5 + 2 * offset),
-        ground
-    ]);
-
-    // run the engine
-    Engine.run(engine);
-    Events.on(engine, 'collisionActive', function(event) {
-                var pairs = event.pairs;
-
-                // change object colours to show those ending a collision
-                for (var i = 0; i < pairs.length; i++) {
-                    var pair = pairs[i];
-                    pair.bodyA.render.fillStyle = '#979797';
-                    pair.bodyB.render.fillStyle = '#cff498';
-                }
-                Body.setStatic(pairs[0].bodyA, true);
-                Body.setStatic(pairs[0].bodyB, true);
-              })
-
-
+// run the engine
+Engine.run(engine);
 
 export default class GameCanvas extends React.Component {
 
   handleClick(e) {
-    let offset = 10 * Common.random(0, 1) * Common.choose([1,-1]);
-    let texture =  Common.choose([brickStyle1, brickStyle2, brickStyle3, brickStyle4, brickStyle5]);
-    let newBody = Bodies.rectangle(300 - offset, 5, 200, 40, { isStatic: false, friction: 1, render: { sprite: { texture: texture } } });
-    World.add(engine.world, [
-        newBody,
-        ground
-      ]);
-    setTimeout(() => {
-      // this.frozenBricks([newBody]);
-    }, 3000);
-    // World.clear(engine.world);
-    // World.remove(engine.world, engine.world.bodies)
-    // console.log(engine.world.bodies);
+    babelLevel++;
+    isDropping = true;
+
+    let bricks = engine.world.bodies;
+    let lastBrick = bricks[bricks.length -1];
+
+    let offset = 20 * Common.random(0, 1) * Common.choose([1,-1]);
+    let texture =  Common.choose([brickStyle4, brickStyle5, brickStyle3, brickStyle1, brickStyle2]);
+
+
+    let newBody = Bodies.rectangle(375 - offset, 5, 100, 20, { label: 'new brick ID', inertia: Infinity, density: 10000, mass: 10000, render: { sprite: { texture: texture } } });
+
+    World.add(engine.world, newBody);
   }
 
   collapseBricks(from) {
     let bricks = engine.world.bodies;
+    let collapsedAt = from + 1;
+    let collapseBrick = bricks[collapsedAt];
+
+    if (!collapseBrick)
+      return;
 
     for(let j = from + 1; j < bricks.length; j++) {
-      Body.setStatic(bricks[j], false);
-      Body.setPosition(bricks[from], { x: 100, y: 50 });
+      Body.setInertia(bricks[j], 0.1);
+      Body.setPosition(bricks[j], { x: collapseBrick.position.x+Common.choose([-50,-50]), y: 1800 - collapsedAt*20 });
     }
-    // Body.setVelocity(bricks[from-1], { x: 100, y: 200 });
-
-    // Body.setStatic(bricks[from], false);
-    // setTimeout(() => {
-    //   Body.setPosition(bricks[from], { x: 100, y: 50 });
-    // }, 5000);
     
-    
-    // Body.setStatic(bricks[2], false);
-    // Body.applyForce(bricks[2], { x: 100, y: 20 }, { 
-    //                     x: 100, 
-    //                     y: 50
-    //                 });
-    console.log(bricks[from]);
+    //clear collapesed bricks    
+    setTimeout(() => {
+      World.remove(engine.world, bricks.slice(collapsedAt));
+    }, 3000);
   }
 
   render () {
     return (
       <div id="game-canvas">
-        <button className="btn btn-primary" onClick={(e) => this.handleClick(e)}>Insert Coin</button>
-        <button className="btn btn-danger" onClick={(e) => this.collapseBricks(5)}>Collapse from 5</button>
+        <button className="btn btn-primary" disabled={isDropping} onClick={(e) => this.handleClick(e)}>Insert Coin</button>
+        <button className="btn btn-danger" onClick={(e) => this.collapseBricks(15)}>Collapse from 5</button>
       </div>
     )
   }
 }
 
+// for debug
 window.bricks = engine.world.bodies;
