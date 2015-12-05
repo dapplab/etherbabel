@@ -9,7 +9,7 @@ var brickBorder = 1;
 var brickFullHeight = brickHeight + brickBorder*2;
 var brickHalfWidth = brickWidth / 2;
 
-var brickD = 1001;
+var brickD = 1073741824.0; // 2**30;
 var brickR = brickD / 2;
 
 var centralBrickLeft = canvasWidth/2 - brickWidth/2;
