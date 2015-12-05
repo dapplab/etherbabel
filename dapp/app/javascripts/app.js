@@ -10,12 +10,48 @@ var brickFullHeight = brickHeight + brickBorder*2;
 
 var centralBrickLeft = canvasWidth/2 - brickWidth/2;
 
-function renderDemo() {
+function formatBrick(brick) {
+    if ($.isArray(brick)) { // Init
+        return {
+            id: brick[0].toString(),
+            from: brick[1],
+            value: brick[2].toString(),
+            offset: brick[3].toString()
+        }
+    } else { // Event
+        return {
+            id: brick.id.toString(),
+            from: brick.from,
+            height: brick.height.toString(),
+            offset: brick.offset.toString()
+        };
+    }
+}
+
+function clearCanvas() {
+    $('#canvas').remove();
+    $('body').append("<div id='canvas'></div>");
+}
+
+function addBrickToCanvas(level, brick) {
+    $('#canvas').append('<div class="brick" data-level="'+ level + '">' + level + '</div>');
+}
+
+function renderDemo(bricks) {
+    clearCanvas();
+    $.each(bricks, addBrickToCanvas);
+
     $('#canvas .brick').each(function(i, el) {
         var level = $(el).data('level');
         $(el).css('bottom', level*brickFullHeight);
         $(el).css('left', centralBrickLeft);
     });
+}
+
+function addBrick(brick) {
+    window.bricks.push(brick);
+    renderDemo(window.bricks);
+    console.log("AddBrick", brick);
 }
 
 function setupWeb3(sandboxId) {
@@ -37,39 +73,38 @@ function setupFilters(babel) {
     babel.AddBrick('latest', function(err, result) {
         if (err) {
             console.log(err);
-        }
-        else {
-            var obj = {
-                id: result.args.id.toString(),
-                from: result.args.from,
-                height: result.args.height.toString(),
-                offset: result.args.offset.toString()
-            }
-            console.log("AddBrick", obj);
+        } else {
+            var obj = formatBrick(result.args);
+            addBrick(obj);
         }
     });
 }
 
-function initTower() {
+function getBricks() {
     var bricks = [];
 
     var i = 0;
     while(true) {
-        var brick = babel.bricks(i, {
-            from: gamerAddress
-        });
+        var brick = formatBrick(babel.bricks(i, { from: gamerAddress }));
 
-        console.log("Load brick", brick);
-        if(brick[1] === '0x') {
+        if(brick.from === '0x') {
             break;
         } else {
             bricks.push(brick);
+            console.log("Load brick", brick);
         }
 
         i++;
     }
 
+    return bricks;
+}
+
+function init() {
+    window.bricks = getBricks();
     console.log("Bricks loaded.");
+
+    renderDemo(window.bricks);
 }
 
 var sandboxId = "0880bf1eba692f18ba3f5be5438324ebace5fd15";
@@ -86,7 +121,7 @@ window.web3 = web3;
 window.babel = babel;
 
 $(function() {
-    initTower();
+    init();
 
     $('#add-brick').on('click', function() {
         babel.addBrick({
@@ -94,6 +129,5 @@ $(function() {
             value: brickPrice,
         });
         console.log('add brick. yeah!');
-        renderDemo();
     })
 });
