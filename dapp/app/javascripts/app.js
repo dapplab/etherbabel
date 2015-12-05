@@ -60,6 +60,12 @@ function addBrick(brick) {
     console.log("AddBrick", brick);
 }
 
+function collapse(obj) {
+    window.bricks = window.bricks.slice(0, obj.collapsedAt+1);
+    renderDemo(window.bricks);
+    console.log("Collapsed!", obj);
+}
+
 function setupWeb3(sandboxId) {
     var web3 = new Web3();
     web3.setProvider(new web3.providers.HttpProvider("http://babel.on.ether.camp:8555/sandbox/" + sandboxId));
@@ -83,6 +89,21 @@ function setupFilters(babel) {
             var obj = formatBrick(result.args);
             addBrick(obj);
         }
+    });
+
+    babel.Collapse('latest', function(err, result) {
+      if (err) {
+        console.log(err);
+      } else {
+        var obj = {
+          id: result.args.id.toNumber(),
+          collapsedAt: result.args.collapsedAt.toNumber(),
+          account: result.args.account,
+          amount: result.args.amount.toString(),
+          height: result.args.height.toNumber
+        };
+        collapse(obj);
+      }
     });
 }
 
@@ -113,7 +134,7 @@ function init() {
     renderDemo(window.bricks);
 }
 
-var sandboxId = "0880bf1eba692f18ba3f5be5438324ebace5fd15";
+var sandboxId = "8ff32c3ea555ff03ad973175d832279cd3cf8fa5";
 var babelAddress = '0x17956ba5f4291844bc25aedb27e69bc11b5bda39';
 var gamerAddress = '0xdedb49385ad5b94a16f236a6890cf9e0b1e30392';
 
