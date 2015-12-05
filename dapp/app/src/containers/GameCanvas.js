@@ -2,7 +2,7 @@ import React              from 'react';
 import Matter             from 'matter-js';
 import Web3               from 'web3';
 import babelABI           from './../babel-abi';
-import './../styles/app.css';
+// import './../styles/app.css';
 
 var Engine = Matter.Engine,
     World = Matter.World,
@@ -98,7 +98,7 @@ export default class GameCanvas extends React.Component {
 
   constructor() {
     super();
-    this.state = { bricks: [], celebrate: false };
+    this.state = { bricks: [], celebrate: false, loading: false };
   }
 
   donatedByU(brickFrom) {
@@ -108,14 +108,14 @@ export default class GameCanvas extends React.Component {
 
   collapse(obj) {
     let bricks = this.state.bricks.slice(0, obj.collapsedAt+1);
-    this.setState({ bricks: bricks, celebrate: this.donatedByU(obj.account) });
+    this.setState({ bricks: bricks, celebrate: this.donatedByU(obj.account), loading: false });
     console.log("Collapsed!", this.donatedByU(obj.account), obj);
   }
 
   addBrick(brick) {
     let bricks = this.state.bricks;
     bricks.push(brick);
-    this.setState({ bricks: bricks });
+    this.setState({ bricks: bricks, celebrate: false, loading: false });
     console.log("AddBrick", brick);
   }
 
@@ -169,6 +169,7 @@ export default class GameCanvas extends React.Component {
   }
 
   handleClick() {
+    this.setState({ loading: true });
     babel.addBrick({
         from: gamerAddress,
         value: brickPrice,
@@ -227,6 +228,28 @@ export default class GameCanvas extends React.Component {
     )
   }
 
+  renderBrickList(bricks) {
+    return (
+      <div id="canvas">
+        {
+          bricks.map((brick, i) => {
+            return this.renderBrick(brick, i);
+          })
+        }
+      </div>
+    )
+  }
+
+  renderLoading(loading) {
+    if(loading){
+      return (
+        <div> loading ...... </div>
+        )
+    } else {
+      return '';
+    }
+  }
+
   render () {
     return (
       <div>
@@ -234,13 +257,8 @@ export default class GameCanvas extends React.Component {
           <a className="btn btn-primary" onClick={(e) => this.handleClick()}>Insert Coin</a>
           <a className="btn btn-danger" onClick={(e) => this.collapseBricks(15)}>Collapse from 5</a>
         </div>
-        <div id="canvas">
-          {
-            this.state.bricks.map((brick, i) => {
-              return this.renderBrick(brick, i);
-            })
-          }
-        </div>
+        { this.renderLoading(this.state.loading) }
+        { this.renderBrickList(this.state.bricks) }
       </div>
     )
   }
