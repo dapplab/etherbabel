@@ -55,23 +55,19 @@ contract Babel is mortal, named("Babel") {
     }
     
     function collapseCheck() internal {
-        int32 offset = 0;
         uint top = bricks.length - 1;
+        int32 offset = bricks[top].offset;
         uint collapsed_at = top;
         
 
-        for(uint i = top; i > 0; i--) { // block at 0 never collapse
+        for(uint i = top - 1; i > 0; i--) { // block at 0 never collapse
             var brick = bricks[i];
             
-            if (i == top) {
-                offset = brick.offset;
+            if (abs(offset - brick.offset) > brickR) {
+                collapsed_at = i;
+                break;
             } else {
-                if (abs(offset - brick.offset) > brickR) {
-                    collapsed_at = i;
-                    break;
-                } else {
-                    offset = int32((int(offset)*int(i) + int(brick.offset)) / int(i+1)); // possible overflow!
-                }
+                offset = int32((int(offset) * int(top - i) + int(brick.offset)) / int(top - i + 1)); // possible overflow!
             }
         }
         
