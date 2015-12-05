@@ -2,7 +2,7 @@ import React              from 'react';
 import Matter             from 'matter-js';
 import Web3               from 'web3';
 import babelABI           from './../babel-abi';
-// import './../styles/app.css';
+import './../styles/app.css';
 
 var Engine = Matter.Engine,
     World = Matter.World,
@@ -12,13 +12,13 @@ var Engine = Matter.Engine,
     Events = Matter.Events;
 
 // create a Matter.js engine
-var engine = Engine.create(document.body);
+var engine = Engine.create(document.getElementById("canvas"));
 var renderOptions = engine.render.options;
     renderOptions.wireframes = false;
 
 // create two boxes and a ground
-var boxA = Bodies.rectangle(100, 20, 80, 80);
-var boxB = Bodies.rectangle(100, 50, 80, 80);
+// var boxA = Bodies.rectangle(100, 20, 80, 80);
+// var boxB = Bodies.rectangle(100, 50, 80, 80);
 var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true, friction: 1 });
 
 // add all of the bodies to the world
@@ -26,10 +26,10 @@ var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true, friction: 1 }
 
 var offset = 5;
 World.add(engine.world, [
-    Bodies.rectangle(290, 455, 100, 20, { isStatic: true, friction: 1 }),
-    Bodies.rectangle(300, 475, 100, 20, { isStatic: true, friction: 1 }),
-    Bodies.rectangle(300 - offset*2, 495, 100, 20, { isStatic: true, friction: 1 }),
-    Bodies.rectangle(300 + offset*5, 515, 100, 20, { isStatic: true, friction: 1 }),
+    // Bodies.rectangle(290, 455, 100, 20, { isStatic: true, friction: 1 }),
+    // Bodies.rectangle(300, 475, 100, 20, { isStatic: true, friction: 1 }),
+    // Bodies.rectangle(300 - offset*2, 495, 100, 20, { isStatic: true, friction: 1 }),
+    // Bodies.rectangle(300 + offset*5, 515, 100, 20, { isStatic: true, friction: 1 }),
     // Bodies.rectangle(100, 100 + offset, 100.5 + 2 * offset, 50.5),
     // Bodies.rectangle(100 + offset, 100, 50.5, 600.5 + 2 * offset),
     // Bodies.rectangle(-offset, 100, 50.5, 100.5 + 2 * offset),
@@ -66,7 +66,7 @@ function setupBabel(web3, address, abi) {
     return babel;
 }
 
-var sandboxId = "b18d1fe606e60d06830de19157999f8a395d7279";
+var sandboxId = "cb6edebff3efb4e3c083491a02cfc9efba72748f";
 var babelAddress = '0x17956ba5f4291844bc25aedb27e69bc11b5bda39';
 var gamerAddress = '0xdedb49385ad5b94a16f236a6890cf9e0b1e30392';
 
