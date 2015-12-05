@@ -128,12 +128,11 @@ export default class GameCanvas extends React.Component {
   }
 
   setupFilters(babel) {
-    console.log(babel);
     babel.AddBrick('latest', function(err, result) {
         if (err) {
             console.log(err);
         } else {
-            var obj = this.formatBrick(result.args);
+            var obj = this.formatBrick(result.args).bind(this);
             this.addBrick(obj);
         }
     });
@@ -154,25 +153,11 @@ export default class GameCanvas extends React.Component {
     });
   }
 
-  componentWillMount() {
-    this.setupFilters(babel);
-    this.getBricks();
-  }
-
   handleClick(e) {
-    let offset = 10;
-    let newBody = Bodies.rectangle(300 - (offset * Common.random(0, 1) * Common.choose([1,-1])), 5, 100, 20, { friction: 1, frictionStatic: 50 });
-
-    World.add(engine.world, [
-        newBody,
-        ground
-      ]);
-    setTimeout(() => {
-      // this.frozenBricks([newBody]);
-    }, 3000);
-    // World.clear(engine.world);
-    // World.remove(engine.world, engine.world.bodies)
-    // console.log(engine.world.bodies);
+    babel.addBrick({
+        from: gamerAddress,
+        value: brickPrice,
+    });
   }
 
   frozenBricks(bricks=[]) {
@@ -194,56 +179,51 @@ export default class GameCanvas extends React.Component {
     Body.setPosition(bricks[4], { x: 100, y: 0 });
   }
 
-  clearCanvas() {
-    $('#canvas').remove();
-    $('body').append("<div id='canvas'></div>");
-  }
-
-  addBrickToCanvas(level, brick) {
-    $('#canvas').append('<div class="brick" data-offset="' + brick.offset + '" data-level="'+ level + '">' + level + '</div>');
-  }
-
   getBricks() {
-    var bricks = [];
+    var bricks = this.state.bricks;
 
     var i = 0;
     while(true) {
-        var brick = this.formatBrick(babel.bricks(i, { from: gamerAddress }));
+      var brick = this.formatBrick(babel.bricks(i, { from: gamerAddress }));
 
-        if(brick.from === '0x') {
-            break;
-        } else {
-            bricks.push(brick);
-            console.log("Load brick", brick);
-        }
+      if(brick.from === '0x') {
+        break;
+      } else {
+        bricks.push(brick);
 
-        i++;
+        this.setState({ brick: bricks });
+      }
+      i++;
     }
-
-    console.log('getBricks');
-
-    this.setState({ bricks: bricks });
   }
 
-  renderDemo(bricks) {
-    this.clearCanvas();
-    $.each(bricks, this.addBrickToCanvas);
+  componentWillMount() {
+    this.setupFilters(babel);
+    this.getBricks();
+  }
 
-    $('#canvas .brick').each(function(i, el) {
-        var level = $(el).data('level');
-        var offset = parseInt($(el).data('offset'));
-        var left = centralBrickLeft + brickHalfWidth * offset / brickR;
-        $(el).css('bottom', level*brickFullHeight);
-        $(el).css('left', left);
-    });
+  renderBrick(brick, i) {
+    let left = centralBrickLeft + brickHalfWidth * brick.offset / brickR;
+    let bottom = i*brickFullHeight;
+    return (
+      <div className="brick" key={brick.id} style={ { bottom: bottom, left: left } } data-offset={brick.offset} data-level={i} >{brick.id}</div>
+    )
   }
 
   render () {
-    this.renderDemo(this.state.bricks);
     return (
-      <div id="game-canvas">
-        <a className="btn btn-primary" onClick={(e) => this.handleClick(e)}>Insert Coin</a>
-        <a className="btn btn-danger" onClick={(e) => this.collapseBricks(15)}>Collapse from 5</a>
+      <div>
+        <div id="game-canvas">
+          <a className="btn btn-primary" onClick={(e) => this.handleClick(e)}>Insert Coin</a>
+          <a className="btn btn-danger" onClick={(e) => this.collapseBricks(15)}>Collapse from 5</a>
+        </div>
+        <div id="canvas">
+          {
+            this.state.bricks.map((brick, i) => {
+              return this.renderBrick(brick, i);
+            })
+          }
+        </div>
       </div>
     )
   }
