@@ -32,7 +32,7 @@ function setupFilters(babel) {
     });
 }
 
-var sandboxId = "0637d8ec6c714548bdab30710e3e6610346a4e1b";
+var sandboxId = "27656f44c86ec9a4129942c4596ed11c3b7f6b7c";
 var babelAddress = '0x17956ba5f4291844bc25aedb27e69bc11b5bda39';
 var gamerAddress = '0xdedb49385ad5b94a16f236a6890cf9e0b1e30392';
 
@@ -51,6 +51,6 @@ $(function() {
             from: gamerAddress,
             value: brickPrice,
         });
-        console.log('add brick.');
+        console.log('add brick. yeah!');
     })
 });
