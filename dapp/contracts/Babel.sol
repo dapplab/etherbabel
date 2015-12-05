@@ -160,8 +160,8 @@ contract Babel is mortal, named("Babel") {
     
     function randOffset(int32 base) internal returns (int32 offset) {
         bytes32 lastHash = block.blockhash(block.number-1);
-        int32 rand = int32(sha256(lastHash, tx.origin, count));
-        offset = base + (stablizer * (rand % brickR) / 100);
+        bytes32 rand = sha256(lastHash, tx.origin, count);
+        offset = base + int32(int256(stablizer) * (int256(rand) % int256(brickR)) / 100);
     }
     
     function abs(int32 x) internal returns (int32 y) {
