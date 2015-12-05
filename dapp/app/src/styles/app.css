@@ -1,0 +1,16 @@
+#canvas {
+    position: absolute;
+    bottom: 5px;
+    margin-top: 30px;
+    background-color: #000;
+    width: 680px;
+    height: 720px;
+}
+
+#canvas .brick {
+    position: absolute;
+    width: 120px;
+    height: 30px;
+    background-color: #fff;
+    border: 1px solid #000;
+}

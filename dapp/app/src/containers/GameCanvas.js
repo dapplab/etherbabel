@@ -2,6 +2,7 @@ import React              from 'react';
 import Matter             from 'matter-js';
 import Web3               from 'web3';
 import babelABI           from './../babel-abi';
+// import './../styles/app.css';
 
 var Engine = Matter.Engine,
     World = Matter.World,
@@ -127,30 +128,33 @@ export default class GameCanvas extends React.Component {
     }
   }
 
-  setupFilters(babel) {
-    babel.AddBrick('latest', function(err, result) {
-        if (err) {
-            console.log(err);
-        } else {
-            var obj = this.formatBrick(result.args).bind(this);
-            this.addBrick(obj);
-        }
-    });
-
-    babel.Collapse('latest', function(err, result) {
-      if (err) {
+  addBrickCallback(err, result) {
+    if (err) {
         console.log(err);
-      } else {
-        var obj = {
-          id: result.args.id.toNumber(),
-          collapsedAt: result.args.collapsedAt.toNumber(),
-          account: result.args.account,
-          amount: result.args.amount.toString(),
-          height: result.args.height.toNumber
-        };
-        this.collapse(obj);
-      }
-    });
+    } else {
+        var obj = this.formatBrick(result.args);
+        this.addBrick(obj);
+    }
+  }
+
+  CollapseCallback(err, result) {
+    if (err) {
+      console.log(err);
+    } else {
+      var obj = {
+        id: result.args.id.toNumber(),
+        collapsedAt: result.args.collapsedAt.toNumber(),
+        account: result.args.account,
+        amount: result.args.amount.toString(),
+        height: result.args.height.toNumber
+      };
+      this.collapse(obj);
+    }
+  }
+
+  setupFilters(babel) {
+    babel.AddBrick('latest', this.addBrickCallback);
+    babel.Collapse('latest', this.CollapseCallback);
   }
 
   handleClick(e) {
@@ -190,11 +194,11 @@ export default class GameCanvas extends React.Component {
         break;
       } else {
         bricks.push(brick);
-
-        this.setState({ brick: bricks });
       }
       i++;
     }
+
+    this.setState({ brick: bricks });
   }
 
   componentWillMount() {
