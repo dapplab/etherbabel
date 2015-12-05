@@ -2,7 +2,7 @@ import React              from 'react';
 import Matter             from 'matter-js';
 import Web3               from 'web3';
 import babelABI           from './../babel-abi';
-// import './../styles/app.css';
+import './../styles/app.css';
 
 var Engine = Matter.Engine,
     World = Matter.World,
@@ -153,11 +153,11 @@ export default class GameCanvas extends React.Component {
   }
 
   setupFilters(babel) {
-    babel.AddBrick('latest', this.addBrickCallback);
-    babel.Collapse('latest', this.CollapseCallback);
+    babel.AddBrick('latest', this.addBrickCallback.bind(this));
+    babel.Collapse('latest', this.CollapseCallback.bind(this));
   }
 
-  handleClick(e) {
+  handleClick() {
     babel.addBrick({
         from: gamerAddress,
         value: brickPrice,
@@ -218,7 +218,7 @@ export default class GameCanvas extends React.Component {
     return (
       <div>
         <div id="game-canvas">
-          <a className="btn btn-primary" onClick={(e) => this.handleClick(e)}>Insert Coin</a>
+          <a className="btn btn-primary" onClick={(e) => this.handleClick()}>Insert Coin</a>
           <a className="btn btn-danger" onClick={(e) => this.collapseBricks(15)}>Collapse from 5</a>
         </div>
         <div id="canvas">
