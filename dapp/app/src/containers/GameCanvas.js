@@ -50,7 +50,7 @@ export default class GameCanvas extends React.Component {
 
     this.babelStore = new BabelStore();
     this.babel = this.babelStore.babel;
-    this.state = { action: null, bricks: [], addedBrick: null, celebrate: true, loading: false };
+    this.state = { action: null, bricks: [], addedBrick: null, celebrate: false, loading: false };
 
     this.setupFilters(this.babel);
   }
@@ -171,9 +171,9 @@ export default class GameCanvas extends React.Component {
   render () {
     this.renderBrickList();
 
-    let celebrate = '';
+    let win = '';
     if(this.state.celebrate) {
-      let celebrate = <div className="win">&nbsp;</div>;
+      let win = <div className="win animated infinite swing">&nbsp;</div>;
     }
 
     return (
@@ -185,7 +185,7 @@ export default class GameCanvas extends React.Component {
           <button className="btn btn-primary insert-coin" onClick={(e) => this.handleClick(e)}>Insert Coin</button>
         </div>
         { this.renderLoading(this.state.loading) }
-        { celebrate }
+        { win }
       </div>
     )
   }
