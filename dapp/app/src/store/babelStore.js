@@ -78,7 +78,7 @@ export default class BabelStore {
   }
 
   donatedByU(brickFrom) {
-    return brickFrom === this.coinbase
+    return brickFrom === BabelConfig.gamerAddress;
   }
 
 }// class end
