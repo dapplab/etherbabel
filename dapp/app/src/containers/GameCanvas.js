@@ -86,7 +86,7 @@ export default class GameCanvas extends React.Component {
 
   collapse(obj) {
     let bricks = this.state.bricks.slice(0, obj.collapsedAt+1);
-    this.setState({ bricks: bricks, action: 'collapse', from: obj, celebrate: this.donatedByU(obj.account), loading: false });
+    this.setState({ bricks: bricks, action: 'collapse', from: obj.collapsedAt, celebrate: this.donatedByU(obj.account), loading: false });
     console.log("Collapsed!", this.donatedByU(obj.account), obj);
     this.setState({ action: null })
   }
@@ -237,6 +237,7 @@ export default class GameCanvas extends React.Component {
     return (
       <div id="game-canvas">
         <button className="btn btn-primary" onClick={(e) => this.handleClick(e)}>Insert Coin</button>
+        <button className="btn btn-danger" onClick={(e) => this.collapseBricks(15)}>Collapse from 5</button>
         { this.renderLoading(this.state.loading) }
       </div>
     )
