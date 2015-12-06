@@ -178,8 +178,8 @@ export default class GameCanvas extends React.Component {
     this.renderBrickList();
 
     let win = '';
-    if(this.state.celebrate) {
-      win = <div className="win animated infinite swing">You are Suddenly Wealthy!You win { (Number(this.state.collapsedAmount)/1000000000000000000).toLocaleString() } coins. </div>;
+    if(true) {
+      win = <div className="win animated infinite swing"><p>You just won <b>{ (Number(this.state.collapsedAmount)/1000000000000000000).toLocaleString() }</b> coins. </p></div>;
     }
 
     return (
