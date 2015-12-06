@@ -3,6 +3,12 @@ import Matter             from 'matter-js';
 import Web3               from 'web3';
 import babelABI           from './../babel-abi';
 
+import brickStyle1        from '../images/style1.png';
+import brickStyle2        from '../images/style2.png';
+import brickStyle3        from '../images/style3.png';
+import brickStyle4        from '../images/style4.png';
+import brickStyle5        from '../images/style5.png';
+
 let Engine = Matter.Engine,
     World = Matter.World,
     Bodies = Matter.Bodies,
@@ -13,6 +19,7 @@ let Engine = Matter.Engine,
     babelLevel = 0,
     isDropping = false;
 
+// create a Matter.js engine
 let engine = Engine.create(document.getElementById('canvas-container'));
 let renderOptions = engine.render.options;
     renderOptions.wireframes = false;
@@ -38,7 +45,7 @@ function setupBabel(web3, address, abi) {
     return babel;
 }
 
-var sandboxId = "fbf6b0f1eccd2e6b2f676a1b8433f0f6742e8f19";
+var sandboxId = "7499e9680465892b0c9e96003ec91f6295eb230f";
 var babelAddress = '0x17956ba5f4291844bc25aedb27e69bc11b5bda39';
 var gamerAddress = '0xdedb49385ad5b94a16f236a6890cf9e0b1e30392';
 
@@ -57,7 +64,7 @@ var brickBorder = 1;
 var brickFullHeight = brickHeight + brickBorder*2;
 var brickHalfWidth = brickWidth / 2;
 
-var brickD = 1001;
+var brickD = 1073741824;
 var brickR = brickD / 2;
 
 var centralBrickLeft = canvasWidth/2 - brickWidth/2;
@@ -79,8 +86,9 @@ export default class GameCanvas extends React.Component {
 
   collapse(obj) {
     let bricks = this.state.bricks.slice(0, obj.collapsedAt+1);
-    this.setState({ bricks: bricks, celebrate: this.donatedByU(obj.account), loading: false });
+    this.setState({ bricks: bricks, action: 'collapse', from: obj, celebrate: this.donatedByU(obj.account), loading: false });
     console.log("Collapsed!", this.donatedByU(obj.account), obj);
+    this.setState({ action: null })
   }
 
   addBrick(brick) {
@@ -97,7 +105,7 @@ export default class GameCanvas extends React.Component {
             id: brick[0].toString(),
             from: brick[1],
             value: brick[2].toString(),
-            offset: 0,
+            offset: brick[3].toString(),
             donated: this.donatedByU(brick[1])
         }
     } else { // Event
@@ -105,7 +113,7 @@ export default class GameCanvas extends React.Component {
             id: brick.id.toString(),
             from: brick.from,
             height: brick.height.toString(),
-            offset: 0,
+            offset: brick.offset.toString(),
             donated: this.donatedByU(brick.from)
         };
     }
@@ -148,23 +156,23 @@ export default class GameCanvas extends React.Component {
     });
   }
 
-  frozenBricks(bricks=[]) {
-    if (bricks.length == 0) return;
-    bricks.forEach((brick) => {
-      Body.setStatic(brick, true);
-    });
-  }
-
   collapseBricks(from) {
     let bricks = engine.world.bodies;
+    let collapsedAt = from + 1;
+    let collapseBrick = bricks[collapsedAt];
+
+    if (!collapseBrick)
+      return;
 
     for(let j = from + 1; j < bricks.length; j++) {
-      Body.setStatic(bricks[j], false);
-      console.log(bricks.length, bricks[j]);
+      Body.setInertia(bricks[j], 0.1);
+      Body.setPosition(bricks[j], { x: collapseBrick.position.x+Common.choose([-50,-50]), y: 1800 - collapsedAt*20 });
     }
 
-    Body.setVelocity(bricks[4], { x: 100, y: 0 });
-    Body.setPosition(bricks[4], { x: 100, y: 0 });
+    //clear collapesed bricks
+    setTimeout(() => {
+      World.remove(engine.world, bricks.slice(collapsedAt));
+    }, 3000);
   }
 
   getBricks() {
@@ -190,21 +198,12 @@ export default class GameCanvas extends React.Component {
     this.getBricks();
   }
 
-  renderBrick(brick, i) {
-    let left = centralBrickLeft + brickHalfWidth * brick.offset / brickR;
-    let bottom = i*brickFullHeight;
-    let className = 'brick';
-    if(brick.donated){ className = 'brick donated' }
-    return (
-      <div className={className} key={brick.id} style={ { bottom: bottom, left: left } } data-offset={brick.offset} data-level={i} >{brick.id}</div>
-    )
-  }
-
   renderBrickList() {
     switch(this.state.action){
       case 'init':
         let bodies = this.state.bricks.reduce((objs, brick) => {
-                    objs.push(Bodies.rectangle(300 - (brick.offset * Common.random(0, 1) * Common.choose([1,-1])), 5, 100, 20, { friction: 1, frictionStatic: 50 }));
+                    let offset = centralBrickLeft + brickHalfWidth * brick.offset / brickR
+                    objs.push(Bodies.rectangle(375 - offset, 5, 100, 20, { friction: 1, frictionStatic: 50 }));
                     return objs;
                   }, []);
         console.log(bodies);
@@ -212,9 +211,14 @@ export default class GameCanvas extends React.Component {
      case 'addBrick':
         let brick = this.state.addedBrick;
         if(brick !== null){
-          let newBody = Bodies.rectangle(375 - brick.offset, 5, 100, 20, { label: 'new brick ID', inertia: Infinity, density: 10000, mass: 10000 });
+          let offset = centralBrickLeft + brickHalfWidth * brick.offset / brickR;
+          let texture =  Common.choose([brickStyle4, brickStyle5, brickStyle3, brickStyle1, brickStyle2]);
+          let newBody = Bodies.rectangle(375 - offset, 5, 100, 20, { label: brick.id, inertia: Infinity, density: 10000, mass: 10000, render: { sprite: { texture: texture } } });
+
           World.add(engine.world, newBody);
         }
+      case 'collapse':
+        this.collapseBricks(this.state.from);
     }
   }
 
@@ -231,13 +235,13 @@ export default class GameCanvas extends React.Component {
   render () {
     this.renderBrickList();
     return (
-      <div>
-        <div id="game-canvas">
-          <a className="btn btn-primary" onClick={(e) => this.handleClick()}>Insert Coin</a>
-          <a className="btn btn-danger" onClick={(e) => this.collapseBricks(15)}>Collapse from 5</a>
-        </div>
+      <div id="game-canvas">
+        <button className="btn btn-primary" onClick={(e) => this.handleClick(e)}>Insert Coin</button>
         { this.renderLoading(this.state.loading) }
       </div>
     )
   }
 }
+
+// for debug
+window.bricks = engine.world.bodies;
