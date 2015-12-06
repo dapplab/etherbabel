@@ -12,11 +12,12 @@ export default class BabelStore {
   constructor(props) {
     let web3 = this.setupWeb3();
     let babel = this.setupBabel(web3);
-    this.setupFilters(babel);
 
     this.web3 = web3;
     this.babel = babel;
     this.brickPrice = web3.toWei('1', 'ether');
+    this.coinbase = web3.eth.coinbase;
+    this.gamerAddress = BabelConfig.gamerAddress;
   }
 
   setupWeb3() {
@@ -34,33 +35,7 @@ export default class BabelStore {
     return babel;
   }
 
-  setupFilters(babel) {
-    babel.AddBrick('latest', function(err, result) {
-        if (err) {
-            console.log(err);
-        } else {
-            var obj = formatBrick(result.args);
-            // addBrick(obj);
-        }
-    });
-
-    babel.Collapse('latest', function(err, result) {
-      if (err) {
-        console.log(err);
-      } else {
-        var obj = {
-          id: result.args.id.toNumber(),
-          collapsedAt: result.args.collapsedAt.toNumber(),
-          account: result.args.account,
-          amount: result.args.amount.toString(),
-          height: result.args.height.toNumber
-        };
-        // collapse(obj);
-      }
-    });
-  }
-
-  getBricks() {
+  getBricks(callback) {
     var bricks = [];
 
     var i = 0;
@@ -76,7 +51,9 @@ export default class BabelStore {
 
       i++;
     }
-
+    if (callback && typeof(callback) === "function") {
+      callback.call(this, bricks);
+    }
     return bricks;
   }
 
@@ -86,16 +63,22 @@ export default class BabelStore {
         id: brick[0].toString(),
         from: brick[1],
         value: brick[2].toString(),
-        offset: brick[3].toString()
+        offset: brick[3].toString(),
+        donated: this.donatedByU(brick[1])
       }
     } else { // Event
       return {
         id: brick.id.toString(),
         from: brick.from,
         height: brick.height.toString(),
-        offset: brick.offset.toString()
+        offset: brick.offset.toString(),
+        donated: this.donatedByU(brick.from)
       };
     }
+  }
+
+  donatedByU(brickFrom) {
+    return brickFrom === this.coinbase
   }
 
 }// class end
