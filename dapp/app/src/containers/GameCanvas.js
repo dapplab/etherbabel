@@ -11,7 +11,7 @@ import brickStyle5        from '../images/style5.png';
 
 import addBrickSound from '../sounds/addBrick.wav';
 import collapseSound from '../sounds/collapse.wav';
-import winSound from '../sounds/backgroud-xmas.mid';
+import winSound from '../sounds/win.wav';
 
 function playSound(soundNO){
   switch(soundNO) {
@@ -20,12 +20,12 @@ function playSound(soundNO){
       audio.play();
       break;
     case 1:
-      let audio = new Audio(collapseSound);
-      audio.play();
+      let audio1 = new Audio(collapseSound);
+      audio1.play();
       break;
     case 2:
-      let audio = new Audio(winSound);
-      audio.play();
+      let audio2 = new Audio(winSound);
+      audio2.play();
       break;
   }
 }
