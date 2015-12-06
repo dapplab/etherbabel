@@ -72,7 +72,7 @@ const webpackConfig = {
       },
       /* eslint-disable */
       { // Fonts
-                test: /\.(mp3|wav|ogg)/,
+                test: /\.(mp3|wav|ogg|mid)/,
                 loader: "file"
       },
       { test: /\.woff(\?.*)?$/,  loader: "url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=application/font-woff" },

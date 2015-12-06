@@ -203,6 +203,7 @@ export default class GameCanvas extends React.Component {
 
     let win = '';
     if(this.state.celebrate) {
+      playSound(2);
       win = <div className="win animated infinite swing"><p>You just won <b>{ (Number(this.state.collapsedAmount)/1000000000000000000).toLocaleString() }</b> coins. </p></div>;
       setTimeout(() => {
         this.setState({ celebrate: false });
