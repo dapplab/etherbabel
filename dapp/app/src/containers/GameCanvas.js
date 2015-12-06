@@ -12,7 +12,7 @@ import brickStyle5        from '../images/style5.png';
 // game sizes
 
 let canvasWidth = 750;
-let canvasHeight = 1200;
+let canvasHeight = window.innerHeight;
 let brickWidth = 100;
 let brickHeight = 20;
 let brickBorder = 1;
