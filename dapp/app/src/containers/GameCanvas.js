@@ -132,13 +132,17 @@ export default class GameCanvas extends React.Component {
     });
   }
 
+  createBrickRectangle(brick) {
+    let offset = centralBrickLeft + brickHalfWidth * brick.offset / brickR;
+    let texture = Common.choose([brickStyle4, brickStyle5, brickStyle3, brickStyle1, brickStyle2]);
+    return Bodies.rectangle(offset, 5, brickWidth, brickHeight, { label: brick.id, inertia: Infinity, density: 10000, mass: 10000, render: { sprite: { texture: texture } } });
+  }
+
   renderBrickList() {
     switch(this.state.action){
       case 'init':
         let bodies = this.state.bricks.reduce((objs, brick) => {
-                    let offset = centralBrickLeft + brickHalfWidth * brick.offset / brickR;
-                    let texture = Common.choose([brickStyle4, brickStyle5, brickStyle3, brickStyle1, brickStyle2]);
-                    objs.push(Bodies.rectangle(offset, 5, brickWidth, brickHeight, { label: brick.id, inertia: Infinity, density: 10000, mass: 10000, render: { sprite: { texture: texture } } }));
+                    objs.push(this.createBrickRectangle(brick));
                     return objs;
                   }, []);
 
@@ -147,10 +151,7 @@ export default class GameCanvas extends React.Component {
      case 'addBrick':
         let brick = this.state.addedBrick;
         if(brick !== null){
-          let offset = centralBrickLeft + brickHalfWidth * brick.offset / brickR;
-          let texture =  Common.choose([brickStyle4, brickStyle5, brickStyle3, brickStyle1, brickStyle2]);
-          let newBody = Bodies.rectangle(offset, 5, brickWidth, brickHeight, { label: brick.id, inertia: Infinity, density: 10000, mass: 10000, render: { sprite: { texture: texture } } });
-
+          let newBody = this.createBrickRectangle(brick);
           World.add(engine.world, newBody);
         }
       case 'collapse':
