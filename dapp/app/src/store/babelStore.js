@@ -2,7 +2,7 @@ import Web3               from 'web3';
 import babelABI           from './../babel-abi';
 
 const BabelConfig = {
-  sandboxId: "ea66301bd71d6c05a9aea2d59b52d2036b7907cf",
+  sandboxId: "4e52fd14428ea8e95250ef1185031136f982d3bd",
   babelAddress: '0x17956ba5f4291844bc25aedb27e69bc11b5bda39',
   gamerAddress: '0xdedb49385ad5b94a16f236a6890cf9e0b1e30392',
   providerUrl: 'http://babel.on.ether.camp:8555/sandbox/'
