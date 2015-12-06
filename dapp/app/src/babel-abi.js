@@ -72,7 +72,43 @@ var babelABI = [
       "type" : "function",
       "outputs" : [
          {
-            "type" : "int32[1024]",
+            "type" : "uint[512]",
+            "name" : "ids"
+         }
+      ],
+      "name" : "getIds",
+      "constant" : true,
+      "inputs" : []
+   },
+   {
+      "type" : "function",
+      "outputs" : [
+         {
+            "type" : "address[512]",
+            "name" : "addresses"
+         }
+      ],
+      "name" : "getFroms",
+      "constant" : true,
+      "inputs" : []
+   },
+   {
+      "type" : "function",
+      "outputs" : [
+         {
+            "type" : "uint[512]",
+            "name" : "values"
+         }
+      ],
+      "name" : "getValues",
+      "constant" : true,
+      "inputs" : []
+   },
+   {
+      "type" : "function",
+      "outputs" : [
+         {
+            "type" : "int32[512]",
             "name" : "offset"
          }
       ],

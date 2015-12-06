@@ -39,15 +39,21 @@ export default class BabelStore {
     var bricks = [];
 
     var length = this.babel.getHeight({ from: BabelConfig.gamerAddress }).toNumber();
+    console.log("loading bricks ...");
+    var ids = this.babel.getIds({ from: BabelConfig.gamerAddress });
+    var froms = this.babel.getFroms({ from: BabelConfig.gamerAddress });
+    var values = this.babel.getValues({ from: BabelConfig.gamerAddress });
     var offsets = this.babel.getOffsets({ from: BabelConfig.gamerAddress });
     for(var i=0; i < length; i++) {
         bricks.push({
-            id: '-1',
-            from: '0x',
-            value: '-1',
-            offset: offsets[i].toNumber()
+            id: ids[i].toString(),
+            from: froms[i],
+            value: values[i].toString(),
+            offset: offsets[i].toString(),
+            donated: this.donatedByU(froms[i])
         });
     }
+    console.log(bricks);
     console.log(length + " bricks loaded.");
 
     if (callback && typeof(callback) === "function") {
