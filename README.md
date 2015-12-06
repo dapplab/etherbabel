@@ -27,3 +27,6 @@ b. if the tower doesn't collapse after the brick added:
 
 Just add a new brick. If the brick's sender has non-zero amount of rewards in his reward account, those rewards will be transfered to sender's address.
 
+## Take a peak
+
+![game snapshot](https://raw.githubusercontent.com/dapplab/etherbabel/master/dapp/app/src/images/game-snapshot.jpg)
