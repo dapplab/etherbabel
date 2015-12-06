@@ -20,6 +20,9 @@ let renderOptions = engine.render.options;
     engine.render.canvas.height = 1800;
 let ground = Bodies.rectangle(375, 1810, 760, 120, { isStatic: true, render: { visible: false } });
 
+World.add(engine.world, [ground]);
+Engine.run(engine);
+
 function setupWeb3(sandboxId) {
   var web3 = new Web3();
   web3.setProvider(new web3.providers.HttpProvider("http://babel.on.ether.camp:8555/sandbox/" + sandboxId));
@@ -35,7 +38,7 @@ function setupBabel(web3, address, abi) {
     return babel;
 }
 
-var sandboxId = "d6959069f7057c64247014c551f33ed658e4343f";
+var sandboxId = "4104a0d131c1927ef43b48001570129d6bc9b7ac";
 var babelAddress = '0x17956ba5f4291844bc25aedb27e69bc11b5bda39';
 var gamerAddress = '0xdedb49385ad5b94a16f236a6890cf9e0b1e30392';
 
@@ -67,11 +70,10 @@ export default class GameCanvas extends React.Component {
 
   constructor() {
     super();
-    this.state = { action: 'init', bricks: [], celebrate: false, loading: false };
+    this.state = { action: null, bricks: [], addedBrick: null, celebrate: false, loading: false };
   }
 
   donatedByU(brickFrom) {
-    console.log('brickFrom', brickFrom);
     return brickFrom === coinbase
   }
 
@@ -94,7 +96,7 @@ export default class GameCanvas extends React.Component {
             id: brick[0].toString(),
             from: brick[1],
             value: brick[2].toString(),
-            offset: brick[3].toString(),
+            offset: 0,
             donated: this.donatedByU(brick[1])
         }
     } else { // Event
@@ -102,7 +104,7 @@ export default class GameCanvas extends React.Component {
             id: brick.id.toString(),
             from: brick.from,
             height: brick.height.toString(),
-            offset: brick.offset.toString(),
+            offset: 0,
             donated: this.donatedByU(brick.from)
         };
     }
@@ -138,7 +140,7 @@ export default class GameCanvas extends React.Component {
   }
 
   handleClick() {
-    this.setState({ loading: true });
+    this.setState({ loading: true, action: null });
     babel.addBrick({
         from: gamerAddress,
         value: brickPrice,
@@ -179,7 +181,7 @@ export default class GameCanvas extends React.Component {
       i++;
     }
 
-    this.setState({ brick: bricks });
+    this.setState({ brick: bricks, action: 'init' });
   }
 
   componentWillMount() {
@@ -203,10 +205,9 @@ export default class GameCanvas extends React.Component {
         let bodies = this.state.bricks.reduce((objs, brick) => {
                     objs.push(Bodies.rectangle(300 - (brick.offset * Common.random(0, 1) * Common.choose([1,-1])), 5, 100, 20, { friction: 1, frictionStatic: 50 }));
                     return objs;
-                  }, [ground]);
+                  }, []);
         console.log(bodies);
         World.add(engine.world, bodies.reverse());
-        Engine.run(engine);
     }
   }
 
