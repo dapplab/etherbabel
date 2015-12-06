@@ -119,10 +119,17 @@ export default class GameCanvas extends React.Component {
     babel.Collapse('latest', this.collapseCallback.bind(this));
   }
 
-  handleClick() {
+
+  handleClick(e) {
     playSound(0);
+    let ele = e.target;
+    ele.disabled = true;
+    setTimeout(() => {
+      ele.disabled = false;
+    }, 1000);
+
     this.setState({ loading: true, action: null });
-    this.babel.addBrick({
+    this.babel.addBrick('', {
         from: this.babelStore.gamerAddress,
         value: this.babelStore.brickPrice,
     });
@@ -139,13 +146,13 @@ export default class GameCanvas extends React.Component {
 
     for(let j = from + 1; j < bricks.length; j++) {
       Body.setInertia(bricks[j], 0.1);
-      Body.setPosition(bricks[j], { x: collapseBrick.position.x+Common.choose([-50,-50]), y: canvasHeight - collapsedAt*20 });
+      Body.setPosition(bricks[j], { x: collapseBrick.position.x+Common.choose([200,-200]), y: canvasHeight - collapsedAt*20 });
     }
 
     //clear collapesed bricks
     setTimeout(() => {
       World.remove(engine.world, bricks.slice(collapsedAt));
-    }, 3000);
+    }, 2000);
   }
 
   componentDidMount() {
@@ -154,13 +161,17 @@ export default class GameCanvas extends React.Component {
     });
   }
 
+  createBrickRectangle(brick) {
+    let offset = centralBrickLeft + brickHalfWidth * brick.offset / brickR;
+    let texture = Common.choose([brickStyle4, brickStyle5, brickStyle3, brickStyle1, brickStyle2]);
+    return Bodies.rectangle(offset, 5, brickWidth, brickHeight, { label: brick.id, inertia: Infinity, density: 10000, mass: 10000, render: { sprite: { texture: texture } } });
+  }
+
   renderBrickList() {
     switch(this.state.action){
       case 'init':
         let bodies = this.state.bricks.reduce((objs, brick) => {
-                    let offset = centralBrickLeft + brickHalfWidth * brick.offset / brickR;
-                    let texture = Common.choose([brickStyle4, brickStyle5, brickStyle3, brickStyle1, brickStyle2]);
-                    objs.push(Bodies.rectangle(offset, 5, brickWidth, brickHeight, { label: brick.id, inertia: Infinity, density: 10000, mass: 10000, render: { sprite: { texture: texture } } }));
+                    objs.push(this.createBrickRectangle(brick));
                     return objs;
                   }, []);
 
@@ -169,10 +180,7 @@ export default class GameCanvas extends React.Component {
      case 'addBrick':
         let brick = this.state.addedBrick;
         if(brick !== null){
-          let offset = centralBrickLeft + brickHalfWidth * brick.offset / brickR;
-          let texture =  Common.choose([brickStyle4, brickStyle5, brickStyle3, brickStyle1, brickStyle2]);
-          let newBody = Bodies.rectangle(offset, 5, brickWidth, brickHeight, { label: brick.id, inertia: Infinity, density: 10000, mass: 10000, render: { sprite: { texture: texture } } });
-
+          let newBody = this.createBrickRectangle(brick);
           World.add(engine.world, newBody);
         }
       case 'collapse':
@@ -195,15 +203,22 @@ export default class GameCanvas extends React.Component {
 
     let win = '';
     if(this.state.celebrate) {
-      win = <div className="win animated infinite swing">You are Suddenly Wealthy!You win { (Number(this.state.collapsedAmount)/1000000000000000000).toLocaleString() } coins. </div>;
+      win = <div className="win animated infinite swing"><p>You just won <b>{ (Number(this.state.collapsedAmount)/1000000000000000000).toLocaleString() }</b> coins. </p></div>;
     }
 
     return (
       <div id="game-canvas">
         <div className="game-spec">
-          <h2>Game Babel</h2>
-          <h3>Introduction</h3>
-          <p>An eth as an coin, deposity it, getting a chance to win your 'Christmas Gift'. lol <br /> Take your chance, get your lucky :)</p>
+          <h2>Babel the Tower</h2>
+          <p>Insert 1 eth coin, drop a Christmas gift and win rewards. lol</p>
+          <p>Enjoy and have fun :)</p>
+          <p>
+            <a target='_blank' href='https://github.com/dapplab/etherbabel'>Github</a>
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            <a target='_blank' href='https://github.com/dapplab/etherbabel'>Help</a>
+          </p>
           <button className="btn btn-primary insert-coin" onClick={(e) => this.handleClick(e)}>Insert Coin</button>
         </div>
         { this.renderLoading(this.state.loading) }
