@@ -127,14 +127,23 @@ function getBricks() {
     return bricks;
 }
 
+function getBricksFromOffsets() {
+    var bricks = [];
+
+    var offsets = babel.getOffsets();
+    console.log(offsets);
+
+    return bricks;
+}
+
 function init() {
-    window.bricks = getBricks();
+    window.bricks = getBricksFromOffsets();
     console.log("Bricks loaded.");
 
     renderDemo(window.bricks);
 }
 
-var sandboxId = "75963edba9e7f7a6a8760ea6f8f62f5c532b5324";
+var sandboxId = "518209475f37d9f657559446f81e1aa3fb6cab3c";
 var babelAddress = '0x17956ba5f4291844bc25aedb27e69bc11b5bda39';
 var gamerAddress = '0xdedb49385ad5b94a16f236a6890cf9e0b1e30392';
 

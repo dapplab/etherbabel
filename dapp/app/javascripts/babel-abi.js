@@ -100,6 +100,15 @@ window.babelABI = [{
 }, {
     "constant": false,
     "inputs": [],
+    "name": "getOffsets",
+    "outputs": [{
+        "name": "",
+        "type": "int32[1024]"
+    }],
+    "type": "function"
+}, {
+    "constant": false,
+    "inputs": [],
     "name": "addBrick",
     "outputs": [],
     "type": "function"
@@ -133,6 +142,10 @@ window.babelABI = [{
         "indexed": false,
         "name": "offset",
         "type": "int32"
+    }, {
+        "indexed": false,
+        "name": "message",
+        "type": "string"
     }],
     "name": "AddBrick",
     "type": "event"
