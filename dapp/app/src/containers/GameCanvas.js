@@ -50,7 +50,7 @@ export default class GameCanvas extends React.Component {
 
     this.babelStore = new BabelStore();
     this.babel = this.babelStore.babel;
-    this.state = { action: null, bricks: [], addedBrick: null, celebrate: false, loading: false };
+    this.state = { action: null, bricks: [], addedBrick: null, celebrate: true, loading: false };
 
     this.setupFilters(this.babel);
   }
@@ -170,11 +170,22 @@ export default class GameCanvas extends React.Component {
 
   render () {
     this.renderBrickList();
+
+    let celebrate = '';
+    if(this.state.celebrate) {
+      let celebrate = <div className="win">&nbsp;</div>;
+    }
+
     return (
       <div id="game-canvas">
-        <button className="btn btn-primary" onClick={(e) => this.handleClick(e)}>Insert Coin</button>
-        <button className="btn btn-danger" onClick={(e) => this.collapseBricks(15)}>Collapse from 5</button>
+        <div className="game-spec">
+          <h2>Game Babel</h2>
+          <h3>Introduction</h3>
+          <p>An eth as an coin, deposity it, getting a chance to win your 'Christmas Gift'. lol <br /> Take your chance, get your lucky :)</p>
+          <button className="btn btn-primary insert-coin" onClick={(e) => this.handleClick(e)}>Insert Coin</button>
+        </div>
         { this.renderLoading(this.state.loading) }
+        { celebrate }
       </div>
     )
   }

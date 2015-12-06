@@ -3,7 +3,7 @@
 @import 'animate';
 
 body {
-
+  color: #222;
 }
 #canvas-container {
   max-height: 750px;
@@ -20,7 +20,41 @@ body {
 .loading {
   background: url(../images/onmyway.png) center 10px no-repeat;
   height: 230px;
-  width: 422px;
+  width: 80%;
   position: absolute;
 
+}
+
+.game-spec {
+  width: 200px;
+  position: fixed;
+  right: 0;
+  background: #F0F0F1;
+  height: 100%;
+  padding: 15px;
+  h2 {
+    font-size: 28px;
+  }
+  h3 {
+    font-size: 18px;
+  }
+  p {
+    font-size: 14px;
+    color: #555;
+  }
+  .btn {
+    border: 0;
+    color: #fff;
+    background: #12975E;
+    padding: 8px 20px;
+    margin: 1em 0;
+    border-radius: 5px;
+  }
+}
+
+.win {
+  background: url(../images/win.png) center 20px no-repeat;
+  height: 230px;
+  width: 100%;
+  position: absolute;
 }
