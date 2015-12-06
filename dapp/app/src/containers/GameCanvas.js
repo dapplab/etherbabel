@@ -8,6 +8,7 @@ import brickStyle2        from '../images/style2.png';
 import brickStyle3        from '../images/style3.png';
 import brickStyle4        from '../images/style4.png';
 import brickStyle5        from '../images/style5.png';
+import loaderImg          from '../images/loader.gif';
 
 import addBrickSound from '../sounds/addBrick.wav';
 import collapseSound from '../sounds/collapse.wav';
@@ -72,7 +73,7 @@ export default class GameCanvas extends React.Component {
 
     this.babelStore = new BabelStore();
     this.babel = this.babelStore.babel;
-    this.state = { action: null, bricks: [], addedBrick: null, celebrate: false, loading: false };
+    this.state = { action: null, bricks: [], addedBrick: null, celebrate: false, loading: false, showLoader: true };
 
     this.setupFilters(this.babel);
   }
@@ -159,8 +160,8 @@ export default class GameCanvas extends React.Component {
 
   componentDidMount() {
     setTimeout( ()=> {
-        var bricks = this.babelStore.getBricksFromOffsets(this.initBricks.bind(this));
-        this.setState({ bricks: bricks });
+      var bricks = this.babelStore.getBricksFromOffsets(this.initBricks.bind(this));
+      this.setState({ bricks: bricks, showLoader: false  });
     }, 1000 );
   }
 
@@ -215,6 +216,11 @@ export default class GameCanvas extends React.Component {
       }, 15000);
     }
 
+    let loader = '';
+    if(this.state.loader) {
+      loader = <div className="loader"><img src={loaderImg} /></div>;
+    }
+
     return (
       <div id="game-canvas">
         <div className="game-spec">
@@ -232,6 +238,7 @@ export default class GameCanvas extends React.Component {
         </div>
         { this.renderLoading(this.state.loading) }
         { win }
+        { loader }
       </div>
     )
   }
