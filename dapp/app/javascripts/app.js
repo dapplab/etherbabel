@@ -130,20 +130,28 @@ function getBricks() {
 function getBricksFromOffsets() {
     var bricks = [];
 
+    var length = babel.getHeight({ from: gamerAddress }).toNumber();
     var offsets = babel.getOffsets({ from: gamerAddress });
-    console.log("offsets", offsets);
+    for(var i=0; i < length; i++) {
+        bricks.push({
+            id: '-1',
+            from: '0x',
+            value: '-1',
+            offset: offsets[i].toNumber()
+        });
+    }
+    console.log(length + " bricks loaded.");
 
     return bricks;
 }
 
 function init() {
-    window.bricks = getBricks();
-    console.log("Bricks loaded.");
+    window.bricks = getBricksFromOffsets();
 
     renderDemo(window.bricks);
 }
 
-var sandboxId = "ad4d13f2bb42be973245d513b0b10a4fbdd95677";
+var sandboxId = "151d8b972335fc65ddd1abdf87854b63dea076ca";
 var babelAddress = '0x17956ba5f4291844bc25aedb27e69bc11b5bda39';
 var gamerAddress = '0xdedb49385ad5b94a16f236a6890cf9e0b1e30392';
 
