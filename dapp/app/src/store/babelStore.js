@@ -53,7 +53,6 @@ export default class BabelStore {
             donated: this.donatedByU(froms[i])
         });
     }
-    console.log(bricks);
     console.log(length + " bricks loaded.");
 
     if (callback && typeof(callback) === "function") {
