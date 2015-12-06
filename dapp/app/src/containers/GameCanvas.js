@@ -157,27 +157,26 @@ export default class GameCanvas extends React.Component {
   }
 
   componentDidMount() {
-    this.babelStore.getBricks((bricks) => {
-      this.setState({ bricks: bricks, action: 'init' });
-    });
+    setTimeout( ()=> {
+        var bricks = this.babelStore.getBricks(this.initBrick.bind(this));
+        this.setState({ bricks: bricks });
+    }, 1000 );
   }
 
-  createBrickRectangle(brick) {
+  initBrick(brick, index){
+    World.add(engine.world, this.createBrickRectangle(brick, canvasHeight - 40 - brickHeight * index))
+  }
+
+  createBrickRectangle(brick, y = 5) {
     let offset = centralBrickLeft + brickHalfWidth * brick.offset / brickR;
     let texture = Common.choose([brickStyle4, brickStyle5, brickStyle3, brickStyle1, brickStyle2]);
-    return Bodies.rectangle(offset, 5, brickWidth, brickHeight, { label: brick.id, inertia: Infinity, density: 10000, mass: 10000, render: { sprite: { texture: texture } } });
+    return Bodies.rectangle(offset, y, brickWidth, brickHeight,
+                            { label: brick.id, inertia: Infinity, density: 10000, mass: 10000,
+                              render: { sprite: { texture: texture } } });
   }
 
   renderBrickList() {
     switch(this.state.action){
-      case 'init':
-        let bodies = this.state.bricks.reduce((objs, brick) => {
-                    objs.push(this.createBrickRectangle(brick));
-                    return objs;
-                  }, []);
-
-            console.log(bodies);
-        World.add(engine.world, bodies.reverse());
      case 'addBrick':
         let brick = this.state.addedBrick;
         if(brick !== null){
@@ -200,7 +199,7 @@ export default class GameCanvas extends React.Component {
   }
 
   render () {
-    // this.renderBrickList();
+    this.renderBrickList();
 
     let win = '';
     if(this.state.celebrate) {

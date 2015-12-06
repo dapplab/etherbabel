@@ -2,7 +2,7 @@ import Web3               from 'web3';
 import babelABI           from './../babel-abi';
 
 const BabelConfig = {
-  sandboxId: "845c5eddfeb6044582120b4b3822aaa3aaf6e77c",
+  sandboxId: "1ccd36d176552d8407db74fbce93e8e8d68475f0",
   babelAddress: '0x17956ba5f4291844bc25aedb27e69bc11b5bda39',
   gamerAddress: '0xdedb49385ad5b94a16f236a6890cf9e0b1e30392',
   providerUrl: 'http://babel.on.ether.camp:8555/sandbox/'
@@ -60,14 +60,15 @@ export default class BabelStore {
         break;
       } else {
         bricks.push(brick);
-        console.log("Load brick", brick);
+        //console.log("Load brick", brick);
       }
+      callback.call(this, brick, i);
 
       i++;
     }
-    if (callback && typeof(callback) === "function") {
-      callback.call(this, bricks);
-    }
+    //if (callback && typeof(callback) === "function") {
+      //callback.call(this, bricks);
+    //}
     return bricks;
   }
 
