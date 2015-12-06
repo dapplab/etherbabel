@@ -126,7 +126,7 @@ export default class GameCanvas extends React.Component {
     }, 3000);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.babelStore.getBricks((bricks) => {
       this.setState({ bricks: bricks, action: 'init' });
     });
@@ -161,8 +161,8 @@ export default class GameCanvas extends React.Component {
   renderLoading(loading) {
     if(loading){
       return (
-        <div className="loading"> loading ... </div>
-        )
+        <div className="loading animated infinite zoomOutRight">&nbsp;</div>
+      )
     } else {
       return '';
     }

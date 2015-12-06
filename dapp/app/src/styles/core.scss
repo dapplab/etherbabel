@@ -1,5 +1,6 @@
 @import 'base';
 @import 'vendor/normalize';
+@import 'animate';
 
 body {
 
@@ -14,4 +15,12 @@ body {
     background: url(../images/house.png) center bottom no-repeat,
                 url(../images/bg.png) 0 0 repeat !important;
   }
+}
+
+.loading {
+  background: url(../images/onmyway.png) center 10px no-repeat;
+  height: 230px;
+  width: 422px;
+  position: absolute;
+
 }
