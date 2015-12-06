@@ -40,12 +40,40 @@ contract Babel is mortal, named("Babel") {
         bricks.push(Brick(0, msg.sender, 0, 0, brickM)); // default first brick, never collapse
         
         count = 1;
-        accumCount = 18;
-        clearThreshold = 42;
-        stablizer = 50;
+        accumCount = 9;
+        clearThreshold = 10;
+        stablizer = 90;
         
         if(clearThreshold < accumCount) {
             throw; // otherwise someone may not be able to clear
+        }
+    }
+    
+    function getHeight() constant returns (uint height) {
+        height = bricks.length;
+    }
+    
+    function getIds() constant returns (uint[512] ids) {
+        for(var i=0; i < bricks.length; i++) {
+            ids[i] = bricks[i].id;
+        }
+    }
+    
+    function getFroms() constant returns (address[512] addresses) {
+        for(var i=0; i < bricks.length; i++) {
+            addresses[i] = bricks[i].from;
+        }
+    }
+    
+    function getValues() constant returns (uint[512] values) {
+        for(var i=0; i < bricks.length; i++) {
+            values[i] = bricks[i].value;
+        }
+    }
+    
+    function getOffsets() constant returns (int32[512] offsets) {
+        for(var i=0; i < bricks.length; i++) {
+            offsets[i] = bricks[i].offset;
         }
     }
     
