@@ -160,24 +160,28 @@ export default class GameCanvas extends React.Component {
 
   componentDidMount() {
     setTimeout( ()=> {
-      var bricks = this.babelStore.getBricksFromOffsets(this.initBricks.bind(this));
-      this.setState({ bricks: bricks, showLoader: false  });
+        var bricks = this.babelStore.getBricksFromOffsets();
+        this.initBricks(bricks);
+        this.setState({ bricks: bricks, showLoader: false });
     }, 1000 );
   }
 
   initBricks(bricks){
-    let stack = Composites.stack(centralBrickLeft, 200, 1, bricks.length, 0, 0, (x, y, col, row, last, i) => {
-      return this.createBrickRectangle(bricks[i], canvasHeight - 40 - brickHeight * i);
-    });
-    console.log(stack);
-    World.add(engine.world, stack); //this.createBrickRectangle(brick, canvasHeight - 40 - brickHeight * index))
+      var bodies = [];
+      for(var i = 0; i < bricks.length; i++){
+        bodies.push(this.createBrickRectangle(bricks[i], canvasHeight - 40 - brickHeight * i));
+      }
+
+      console.log(bodies);
+      World.add(engine.world, bodies);
   }
 
   createBrickRectangle(brick, y = 5) {
     let offset = centralBrickLeft + brickHalfWidth * brick.offset / brickR;
     let texture = Common.choose([brickStyle4, brickStyle5, brickStyle3, brickStyle1, brickStyle2]);
+    console.log(offset, y);
     return Bodies.rectangle(offset, y, brickWidth, brickHeight,
-                            { label: brick.id, inertia: Infinity, density: 10000, mass: 10000,
+                            { label: brick.id, inertia: Infinity, density: 10000,
                               render: { sprite: { texture: texture } } });
   }
 

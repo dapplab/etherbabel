@@ -35,7 +35,7 @@ export default class BabelStore {
     return babel;
   }
 
-  getBricksFromOffsets(callback) {
+  getBricksFromOffsets() {
     var bricks = [];
 
     var length = this.babel.getHeight({ from: BabelConfig.gamerAddress }).toNumber();
@@ -55,9 +55,9 @@ export default class BabelStore {
     }
     console.log(length + " bricks loaded.");
 
-    if (callback && typeof(callback) === "function") {
-      callback.call(this, bricks);
-    }
+    //if (callback && typeof(callback) === "function") {
+      //callback.call(this, bricks);
+    //}
 
     return bricks;
   }
