@@ -188,6 +188,13 @@ export default class GameCanvas extends React.Component {
           <h2>Babel the Tower</h2>
           <p>Insert 1 eth coin, drop a Christmas gift and win rewards. lol</p>
           <p>Enjoy and have fun :)</p>
+          <p>
+            <a target='_blank' href='https://github.com/dapplab/etherbabel'>Github</a>
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            <a target='_blank' href='https://github.com/dapplab/etherbabel'>Help</a>
+          </p>
           <button className="btn btn-primary insert-coin" onClick={(e) => this.handleClick(e)}>Insert Coin</button>
         </div>
         { this.renderLoading(this.state.loading) }
