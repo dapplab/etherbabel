@@ -9,22 +9,23 @@ import brickStyle3        from '../images/style3.png';
 import brickStyle4        from '../images/style4.png';
 import brickStyle5        from '../images/style5.png';
 
+import addBrickSound from '../sounds/addBrick.wav';
+import collapseSound from '../sounds/collapse.wav';
+import winSound from '../sounds/backgroud-xmas.mid';
+
 function playSound(soundNO){
   switch(soundNO) {
     case 0:
-      document.embeds[0].play()
-      document.embeds[1].stop()
-      document.embeds[2].stop()
+      let audio = new Audio(addBrickSound);
+      audio.play();
       break;
     case 1:
-      document.embeds[0].stop()
-      document.embeds[1].play()
-      document.embeds[2].stop()
+      let audio = new Audio(collapseSound);
+      audio.play();
       break;
     case 2:
-      document.embeds[0].stop()
-      document.embeds[1].stop()
-      document.embeds[2].play()
+      let audio = new Audio(winSound);
+      audio.play();
       break;
   }
 }
