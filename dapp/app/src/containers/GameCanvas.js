@@ -185,9 +185,9 @@ export default class GameCanvas extends React.Component {
     return (
       <div id="game-canvas">
         <div className="game-spec">
-          <h2>Game Babel</h2>
-          <h3>Introduction</h3>
-          <p>An eth as an coin, deposity it, getting a chance to win your 'Christmas Gift'. lol <br /> Take your chance, get your lucky :)</p>
+          <h2>Babel the Tower</h2>
+          <p>Insert 1 eth coin, drop a Christmas gift and win rewards. lol</p>
+          <p>Enjoy and have fun :)</p>
           <button className="btn btn-primary insert-coin" onClick={(e) => this.handleClick(e)}>Insert Coin</button>
         </div>
         { this.renderLoading(this.state.loading) }
