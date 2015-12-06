@@ -38,7 +38,7 @@ function setupBabel(web3, address, abi) {
     return babel;
 }
 
-var sandboxId = "4104a0d131c1927ef43b48001570129d6bc9b7ac";
+var sandboxId = "fbf6b0f1eccd2e6b2f676a1b8433f0f6742e8f19";
 var babelAddress = '0x17956ba5f4291844bc25aedb27e69bc11b5bda39';
 var gamerAddress = '0xdedb49385ad5b94a16f236a6890cf9e0b1e30392';
 
@@ -86,8 +86,9 @@ export default class GameCanvas extends React.Component {
   addBrick(brick) {
     let bricks = this.state.bricks;
     bricks.push(brick);
-    this.setState({ bricks: bricks, celebrate: false, loading: false });
+    this.setState({ action: 'addBrick', addedBrick: brick, bricks: bricks, celebrate: false, loading: false });
     console.log("AddBrick", brick);
+    this.setState({ addedBrick: null, action: null });
   }
 
   formatBrick(brick) {
@@ -208,6 +209,12 @@ export default class GameCanvas extends React.Component {
                   }, []);
         console.log(bodies);
         World.add(engine.world, bodies.reverse());
+     case 'addBrick':
+        let brick = this.state.addedBrick;
+        if(brick !== null){
+          let newBody = Bodies.rectangle(375 - brick.offset, 5, 100, 20, { label: 'new brick ID', inertia: Infinity, density: 10000, mass: 10000 });
+          World.add(engine.world, newBody);
+        }
     }
   }
 
