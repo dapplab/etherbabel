@@ -5,15 +5,16 @@ contract Babel is mortal, named("Babel") {
     struct Brick {
         uint    id;
         address from;
-        // string message;
         uint    value;
         int32   offset;
+        string  message;
     }
     
     Brick[] public bricks;
     int32   public brickD;
     int32          brickR;
     uint    public brickV;
+    string         brickM;
     
     uint    public count;
     uint    public accumCount;
@@ -23,7 +24,7 @@ contract Babel is mortal, named("Babel") {
     
     mapping(address => uint) accounts;
     
-    event AddBrick(uint indexed id, address indexed from, uint indexed height, int32 offset);
+    event AddBrick(uint indexed id, address indexed from, uint indexed height, int32 offset, string message);
     event Collapse(uint indexed id, uint indexed collapsedAt, address indexed account, uint amount, uint height);
     event Accumulate(uint indexed count);
     event Clearing(uint indexed id, address indexed receiver, uint indexed amount);
@@ -34,7 +35,8 @@ contract Babel is mortal, named("Babel") {
         brickV = 1 ether;
         brickD = 2**30;
         brickR = brickD / 2;
-        bricks.push(Brick(0, msg.sender, 0, 0)); // default first brick, never collapse
+        brickM = "Let's go ~~";
+        bricks.push(Brick(0, msg.sender, 0, 0, brickM)); // default first brick, never collapse
         
         count = 1;
         accumCount = 9;
@@ -46,11 +48,15 @@ contract Babel is mortal, named("Babel") {
         }
     }
     
-    function addBrick() external check_deposit {
+    function addBrick() external {
+        addBrick('');
+    }
+    
+    function addBrick(string m) public check_deposit {
         var offset = randOffset(bricks[bricks.length-1].offset);
-        bricks.push(Brick(count, msg.sender, brickV, offset));
+        bricks.push(Brick(count, msg.sender, brickV, offset, m));
         
-        AddBrick(count, msg.sender, bricks.length, offset);
+        AddBrick(count, msg.sender, bricks.length, offset, m);
         count += 1;
         
         collapseCheck();
