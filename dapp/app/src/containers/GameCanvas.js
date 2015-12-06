@@ -3,6 +3,7 @@ import Matter             from 'matter-js';
 import Web3               from 'web3';
 import babelABI           from './../babel-abi';
 
+import 'styles/core.scss';
 import brickStyle1        from '../images/style1.png';
 import brickStyle2        from '../images/style2.png';
 import brickStyle3        from '../images/style3.png';
@@ -45,7 +46,7 @@ function setupBabel(web3, address, abi) {
     return babel;
 }
 
-var sandboxId = "7499e9680465892b0c9e96003ec91f6295eb230f";
+var sandboxId = "ad4d13f2bb42be973245d513b0b10a4fbdd95677";
 var babelAddress = '0x17956ba5f4291844bc25aedb27e69bc11b5bda39';
 var gamerAddress = '0xdedb49385ad5b94a16f236a6890cf9e0b1e30392';
 
@@ -58,8 +59,8 @@ var brickPrice = web3.toWei('1', 'ether');
 var canvasWidth = 680;
 var canvasHeight = 720;
 
-var brickWidth = 120;
-var brickHeight = 30;
+var brickWidth = 100;
+var brickHeight = 20;
 var brickBorder = 1;
 var brickFullHeight = brickHeight + brickBorder*2;
 var brickHalfWidth = brickWidth / 2;
