@@ -40,7 +40,7 @@ let brickHeight = 20;
 let brickBorder = 1;
 let brickFullHeight = brickHeight + brickBorder*2;
 let brickHalfWidth = brickWidth / 2;
-let brickD = 1073741824;
+let brickD = 1001; //1073741824;
 let brickR = brickD / 2;
 let centralBrickLeft = canvasWidth/2 - brickWidth/2;
 

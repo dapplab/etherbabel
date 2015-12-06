@@ -2,7 +2,7 @@ import Web3               from 'web3';
 import babelABI           from './../babel-abi';
 
 const BabelConfig = {
-  sandboxId: "83113d42a0e3ade40d52d6f15037ca16f49a569c",
+  sandboxId: "b1fd3ad4ad2b8ba3047d7fc18d981860ccd3c406",
   babelAddress: '0x17956ba5f4291844bc25aedb27e69bc11b5bda39',
   gamerAddress: '0xdedb49385ad5b94a16f236a6890cf9e0b1e30392',
   providerUrl: 'http://babel.on.ether.camp:8555/sandbox/'
@@ -49,7 +49,7 @@ export default class BabelStore {
             id: ids[i].toString(),
             from: froms[i],
             value: values[i].toString(),
-            offset: offsets[i].toString(),
+            offset: offsets[i],
             donated: this.donatedByU(froms[i])
         });
     }
@@ -105,7 +105,7 @@ export default class BabelStore {
         id: brick[0].toString(),
         from: brick[1],
         value: brick[2].toString(),
-        offset: brick[3].toString(),
+        offset: brick[3],
         donated: this.donatedByU(brick[1])
       }
     } else { // Event
@@ -113,7 +113,7 @@ export default class BabelStore {
         id: brick.id.toString(),
         from: brick.from,
         height: brick.height.toString(),
-        offset: brick.offset.toString(),
+        offset: brick.offset,
         donated: this.donatedByU(brick.from)
       };
     }
