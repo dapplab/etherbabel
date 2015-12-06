@@ -40,8 +40,8 @@ contract Babel is mortal, named("Babel") {
         bricks.push(Brick(0, msg.sender, 0, 0, brickM)); // default first brick, never collapse
         
         count = 1;
-        accumCount = 9;
-        clearThreshold = 10;
+        accumCount = 18;
+        clearThreshold = 42;
         stablizer = 50;
         
         if(clearThreshold < accumCount) {
