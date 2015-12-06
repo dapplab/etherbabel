@@ -158,7 +158,7 @@ export default class GameCanvas extends React.Component {
 
   componentDidMount() {
     setTimeout( ()=> {
-        var bricks = this.babelStore.getBricks(this.initBrick.bind(this));
+        var bricks = this.babelStore.getBricksFromOffsets(this.initBrick.bind(this));
         this.setState({ bricks: bricks });
     }, 1000 );
   }

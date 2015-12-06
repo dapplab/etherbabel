@@ -2,7 +2,7 @@ import Web3               from 'web3';
 import babelABI           from './../babel-abi';
 
 const BabelConfig = {
-  sandboxId: "26cb1dbb08b9faf906873a4581cf36781c2f31a1",
+  sandboxId: "151d8b972335fc65ddd1abdf87854b63dea076ca",
   babelAddress: '0x17956ba5f4291844bc25aedb27e69bc11b5bda39',
   gamerAddress: '0xdedb49385ad5b94a16f236a6890cf9e0b1e30392',
   providerUrl: 'http://babel.on.ether.camp:8555/sandbox/'
@@ -33,6 +33,28 @@ export default class BabelStore {
     console.log("babel initalized.", babel);
 
     return babel;
+  }
+
+  getBricksFromOffsets(callback) {
+    var bricks = [];
+
+    var length = this.babel.getHeight({ from: BabelConfig.gamerAddress }).toNumber();
+    var offsets = this.babel.getOffsets({ from: BabelConfig.gamerAddress });
+    for(var i=0; i < length; i++) {
+        bricks.push({
+            id: '-1',
+            from: '0x',
+            value: '-1',
+            offset: offsets[i].toNumber()
+        });
+    }
+    console.log(length + " bricks loaded.");
+
+    if (callback && typeof(callback) === "function") {
+      callback.call(this, bricks);
+    }
+
+    return bricks;
   }
 
   getBricks(callback) {

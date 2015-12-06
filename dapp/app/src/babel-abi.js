@@ -60,12 +60,24 @@ var babelABI = [
       "type" : "function",
       "outputs" : [
          {
+            "type" : "uint",
+            "name" : "height"
+         }
+      ],
+      "name" : "getHeight",
+      "constant" : true,
+      "inputs" : []
+   },
+   {
+      "type" : "function",
+      "outputs" : [
+         {
             "type" : "int32[1024]",
             "name" : "offset"
          }
       ],
       "name" : "getOffsets",
-      "constant" : false,
+      "constant" : true,
       "inputs" : []
    },
    {
