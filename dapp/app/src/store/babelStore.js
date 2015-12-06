@@ -36,7 +36,21 @@ export default class BabelStore {
   }
 
   getBricks(callback) {
+
     var bricks = [];
+
+    bricks = [
+      {id: "0", from: "0xdedb49385ad5b94a16f236a6890cf9e0b1e30392", value: "1000000000000000000", offset: "0", donated: true},
+      {id: "1", from: "0xdedb49385ad5b94a16f236a6890cf9e0b1e30392", value: "1000000000000000000", offset: "-84753978", donated: true},
+      {id: "2", from: "0xdedb49385ad5b94a16f236a6890cf9e0b1e30392", value: "1000000000000000000", offset: "-101533667", donated: true},
+      {id: "5", from: "0xdedb49385ad5b94a16f236a6890cf9e0b1e30392", value: "1000000000000000000", offset: "-83289209", donated: true},
+      {id: "149", from: "0xdedb49385ad5b94a16f236a6890cf9e0b1e30392", value: "1000000000000000000", offset: "-59276098", donated: true},
+      {id: "149", from: "0xdedb49385ad5b94a16f236a6890cf9e0b1e30392", value: "1000000000000000000", offset: "-59276098", donated: true}
+    ];
+    if (callback && typeof(callback) === "function") {
+      callback.call(this, bricks);
+    }
+    return bricks;
 
     var i = 0;
     while(true) {
