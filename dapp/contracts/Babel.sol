@@ -34,7 +34,7 @@ contract Babel is mortal, named("Babel") {
     
     function Babel() {
         brickV = 1 ether;
-        brickD = 2**30;
+        brickD = 1001;
         brickR = brickD / 2;
         brickM = "Let's go ~~";
         bricks.push(Brick(0, msg.sender, 0, 0, brickM)); // default first brick, never collapse
