@@ -50,6 +50,7 @@ let Engine = Matter.Engine,
     Common = Matter.Common,
     Constraint = Matter.Constraint,
     Events = Matter.Events,
+    Composites = Matter.Composites,
     babelLevel = 0,
     isDropping = false;
 
@@ -158,13 +159,17 @@ export default class GameCanvas extends React.Component {
 
   componentDidMount() {
     setTimeout( ()=> {
-        var bricks = this.babelStore.getBricksFromOffsets(this.initBrick.bind(this));
+        var bricks = this.babelStore.getBricksFromOffsets(this.initBricks.bind(this));
         this.setState({ bricks: bricks });
     }, 1000 );
   }
 
-  initBrick(brick, index){
-    World.add(engine.world, this.createBrickRectangle(brick, canvasHeight - 40 - brickHeight * index))
+  initBricks(bricks){
+    let stack = Composites.stack(centralBrickLeft, 200, 1, bricks.length, 0, 0, (x, y, col, row, last, i) => {
+      return this.createBrickRectangle(bricks[i], canvasHeight - 40 - brickHeight * i);
+    });
+    console.log(stack);
+    World.add(engine.world, stack); //this.createBrickRectangle(brick, canvasHeight - 40 - brickHeight * index))
   }
 
   createBrickRectangle(brick, y = 5) {
