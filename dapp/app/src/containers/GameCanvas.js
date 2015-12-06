@@ -9,6 +9,19 @@ import brickStyle3        from '../images/style3.png';
 import brickStyle4        from '../images/style4.png';
 import brickStyle5        from '../images/style5.png';
 
+// game sizes
+
+let canvasWidth = 750;
+let canvasHeight = 1200;
+let brickWidth = 100;
+let brickHeight = 20;
+let brickBorder = 1;
+let brickFullHeight = brickHeight + brickBorder*2;
+let brickHalfWidth = brickWidth / 2;
+let brickD = 1073741824;
+let brickR = brickD / 2;
+let centralBrickLeft = canvasWidth/2 - brickWidth/2;
+
 let Engine = Matter.Engine,
     World = Matter.World,
     Bodies = Matter.Bodies,
@@ -23,25 +36,12 @@ let Engine = Matter.Engine,
 let engine = Engine.create(document.getElementById('canvas-container'));
 let renderOptions = engine.render.options;
     renderOptions.wireframes = false;
-    engine.render.canvas.width = 750;
-    engine.render.canvas.height = 1800;
-let ground = Bodies.rectangle(375, 1810, 760, 120, { isStatic: true, render: { visible: false } });
+    engine.render.canvas.width = canvasWidth;
+    engine.render.canvas.height = canvasHeight;
+let ground = Bodies.rectangle(canvasWidth/2, canvasHeight+10, canvasHeight+10, 80, { isStatic: true, render: { visible: false } });
 
 World.add(engine.world, [ground]);
 Engine.run(engine);
-
-var canvasWidth = 750;
-var canvasHeight = 1800;
-var brickWidth = 100;
-var brickHeight = 20;
-var brickBorder = 1;
-var brickFullHeight = brickHeight + brickBorder*2;
-var brickHalfWidth = brickWidth / 2;
-
-var brickD = 1073741824;
-var brickR = brickD / 2;
-
-var centralBrickLeft = canvasWidth/2 - brickWidth/2;
 
 export default class GameCanvas extends React.Component {
 
@@ -117,7 +117,7 @@ export default class GameCanvas extends React.Component {
 
     for(let j = from + 1; j < bricks.length; j++) {
       Body.setInertia(bricks[j], 0.1);
-      Body.setPosition(bricks[j], { x: collapseBrick.position.x+Common.choose([-50,-50]), y: 1800 - collapsedAt*20 });
+      Body.setPosition(bricks[j], { x: collapseBrick.position.x+Common.choose([-50,-50]), y: canvasHeight - collapsedAt*20 });
     }
 
     //clear collapesed bricks
@@ -161,7 +161,7 @@ export default class GameCanvas extends React.Component {
   renderLoading(loading) {
     if(loading){
       return (
-        <div> loading ...... </div>
+        <div className="loading"> loading ... </div>
         )
     } else {
       return '';
