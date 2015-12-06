@@ -2,7 +2,7 @@ import Web3               from 'web3';
 import babelABI           from './../babel-abi';
 
 const BabelConfig = {
-  sandboxId: "ad4d13f2bb42be973245d513b0b10a4fbdd95677",
+  sandboxId: "ea66301bd71d6c05a9aea2d59b52d2036b7907cf",
   babelAddress: '0x17956ba5f4291844bc25aedb27e69bc11b5bda39',
   gamerAddress: '0xdedb49385ad5b94a16f236a6890cf9e0b1e30392',
   providerUrl: 'http://babel.on.ether.camp:8555/sandbox/'
@@ -39,18 +39,18 @@ export default class BabelStore {
 
     var bricks = [];
 
-    bricks = [
-      {id: "0", from: "0xdedb49385ad5b94a16f236a6890cf9e0b1e30392", value: "1000000000000000000", offset: "0", donated: true},
-      {id: "1", from: "0xdedb49385ad5b94a16f236a6890cf9e0b1e30392", value: "1000000000000000000", offset: "-84753978", donated: true},
-      {id: "2", from: "0xdedb49385ad5b94a16f236a6890cf9e0b1e30392", value: "1000000000000000000", offset: "-101533667", donated: true},
-      {id: "5", from: "0xdedb49385ad5b94a16f236a6890cf9e0b1e30392", value: "1000000000000000000", offset: "-83289209", donated: true},
-      {id: "149", from: "0xdedb49385ad5b94a16f236a6890cf9e0b1e30392", value: "1000000000000000000", offset: "-59276098", donated: true},
-      {id: "149", from: "0xdedb49385ad5b94a16f236a6890cf9e0b1e30392", value: "1000000000000000000", offset: "-59276098", donated: true}
-    ];
-    if (callback && typeof(callback) === "function") {
-      callback.call(this, bricks);
-    }
-    return bricks;
+    //bricks = [
+      //{id: "0", from: "0xdedb49385ad5b94a16f236a6890cf9e0b1e30392", value: "1000000000000000000", offset: "0", donated: true},
+      //{id: "1", from: "0xdedb49385ad5b94a16f236a6890cf9e0b1e30392", value: "1000000000000000000", offset: "-84753978", donated: true},
+      //{id: "2", from: "0xdedb49385ad5b94a16f236a6890cf9e0b1e30392", value: "1000000000000000000", offset: "-101533667", donated: true},
+      //{id: "5", from: "0xdedb49385ad5b94a16f236a6890cf9e0b1e30392", value: "1000000000000000000", offset: "-83289209", donated: true},
+      //{id: "149", from: "0xdedb49385ad5b94a16f236a6890cf9e0b1e30392", value: "1000000000000000000", offset: "-59276098", donated: true},
+      //{id: "149", from: "0xdedb49385ad5b94a16f236a6890cf9e0b1e30392", value: "1000000000000000000", offset: "-59276098", donated: true}
+    //];
+    //if (callback && typeof(callback) === "function") {
+      //callback.call(this, bricks);
+    //}
+    //return bricks;
 
     var i = 0;
     while(true) {

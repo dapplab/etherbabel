@@ -104,9 +104,9 @@ export default class GameCanvas extends React.Component {
     ele.disabled = true;
     setTimeout(() => {
       ele.disabled = false;
-    }, 5000);
+    }, 1000);
     this.setState({ loading: true, action: null });
-    this.babel.addBrick({
+    this.babel.addBrick('', {
         from: this.babelStore.gamerAddress,
         value: this.babelStore.brickPrice,
     });
