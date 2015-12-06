@@ -2,54 +2,23 @@ import React              from 'react';
 import Matter             from 'matter-js';
 import Web3               from 'web3';
 import babelABI           from './../babel-abi';
-import './../styles/app.css';
 
-var Engine = Matter.Engine,
+let Engine = Matter.Engine,
     World = Matter.World,
     Bodies = Matter.Bodies,
     Body = Matter.Body,
     Common = Matter.Common,
-    Events = Matter.Events;
+    Constraint = Matter.Constraint,
+    Events = Matter.Events,
+    babelLevel = 0,
+    isDropping = false;
 
-// create a Matter.js engine
-var engine = Engine.create(document.getElementById("canvas"));
-var renderOptions = engine.render.options;
+let engine = Engine.create(document.getElementById('canvas-container'));
+let renderOptions = engine.render.options;
     renderOptions.wireframes = false;
-
-// create two boxes and a ground
-// var boxA = Bodies.rectangle(100, 20, 80, 80);
-// var boxB = Bodies.rectangle(100, 50, 80, 80);
-var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true, friction: 1 });
-
-// add all of the bodies to the world
-// World.add(engine.world, [boxA, boxB, ground]);
-
-var offset = 5;
-World.add(engine.world, [
-    // Bodies.rectangle(290, 455, 100, 20, { isStatic: true, friction: 1 }),
-    // Bodies.rectangle(300, 475, 100, 20, { isStatic: true, friction: 1 }),
-    // Bodies.rectangle(300 - offset*2, 495, 100, 20, { isStatic: true, friction: 1 }),
-    // Bodies.rectangle(300 + offset*5, 515, 100, 20, { isStatic: true, friction: 1 }),
-    // Bodies.rectangle(100, 100 + offset, 100.5 + 2 * offset, 50.5),
-    // Bodies.rectangle(100 + offset, 100, 50.5, 600.5 + 2 * offset),
-    // Bodies.rectangle(-offset, 100, 50.5, 100.5 + 2 * offset),
-    ground
-]);
-
-// run the engine
-Engine.run(engine);
-Events.on(engine, 'collisionActive', function(event) {
-            var pairs = event.pairs;
-
-            // change object colours to show those ending a collision
-            for (var i = 0; i < pairs.length; i++) {
-                var pair = pairs[i];
-                pair.bodyA.render.fillStyle = '#979797';
-                pair.bodyB.render.fillStyle = '#cff498';
-            }
-            Body.setStatic(pairs[0].bodyA, true);
-            Body.setStatic(pairs[0].bodyB, true);
-        })
+    engine.render.canvas.width = 750;
+    engine.render.canvas.height = 1800;
+let ground = Bodies.rectangle(375, 1810, 760, 120, { isStatic: true, render: { visible: false } });
 
 function setupWeb3(sandboxId) {
   var web3 = new Web3();
@@ -66,7 +35,7 @@ function setupBabel(web3, address, abi) {
     return babel;
 }
 
-var sandboxId = "cb6edebff3efb4e3c083491a02cfc9efba72748f";
+var sandboxId = "d6959069f7057c64247014c551f33ed658e4343f";
 var babelAddress = '0x17956ba5f4291844bc25aedb27e69bc11b5bda39';
 var gamerAddress = '0xdedb49385ad5b94a16f236a6890cf9e0b1e30392';
 
@@ -98,7 +67,7 @@ export default class GameCanvas extends React.Component {
 
   constructor() {
     super();
-    this.state = { bricks: [], celebrate: false, loading: false };
+    this.state = { action: 'init', bricks: [], celebrate: false, loading: false };
   }
 
   donatedByU(brickFrom) {
@@ -228,16 +197,17 @@ export default class GameCanvas extends React.Component {
     )
   }
 
-  renderBrickList(bricks) {
-    return (
-      <div id="canvas">
-        {
-          bricks.map((brick, i) => {
-            return this.renderBrick(brick, i);
-          })
-        }
-      </div>
-    )
+  renderBrickList() {
+    switch(this.state.action){
+      case 'init':
+        let bodies = this.state.bricks.reduce((objs, brick) => {
+                    objs.push(Bodies.rectangle(300 - (brick.offset * Common.random(0, 1) * Common.choose([1,-1])), 5, 100, 20, { friction: 1, frictionStatic: 50 }));
+                    return objs;
+                  }, [ground]);
+        console.log(bodies);
+        World.add(engine.world, bodies.reverse());
+        Engine.run(engine);
+    }
   }
 
   renderLoading(loading) {
@@ -251,6 +221,7 @@ export default class GameCanvas extends React.Component {
   }
 
   render () {
+    this.renderBrickList();
     return (
       <div>
         <div id="game-canvas">
@@ -258,7 +229,6 @@ export default class GameCanvas extends React.Component {
           <a className="btn btn-danger" onClick={(e) => this.collapseBricks(15)}>Collapse from 5</a>
         </div>
         { this.renderLoading(this.state.loading) }
-        { this.renderBrickList(this.state.bricks) }
       </div>
     )
   }
