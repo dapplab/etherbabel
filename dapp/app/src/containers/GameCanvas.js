@@ -9,6 +9,26 @@ import brickStyle3        from '../images/style3.png';
 import brickStyle4        from '../images/style4.png';
 import brickStyle5        from '../images/style5.png';
 
+function playSound(soundNO){
+  switch(soundNO) {
+    case 0:
+      document.embeds[0].play()
+      document.embeds[1].stop()
+      document.embeds[2].stop()
+      break;
+    case 1:
+      document.embeds[0].stop()
+      document.embeds[1].play()
+      document.embeds[2].stop()
+      break;
+    case 2:
+      document.embeds[0].stop()
+      document.embeds[1].stop()
+      document.embeds[2].play()
+      break;
+  }
+}
+
 // game sizes
 
 let canvasWidth = 750;
@@ -100,6 +120,7 @@ export default class GameCanvas extends React.Component {
   }
 
   handleClick() {
+    playSound(0);
     this.setState({ loading: true, action: null });
     this.babel.addBrick({
         from: this.babelStore.gamerAddress,
@@ -108,6 +129,7 @@ export default class GameCanvas extends React.Component {
   }
 
   collapseBricks(from) {
+    playSound(1);
     let bricks = engine.world.bodies;
     let collapsedAt = from + 1;
     let collapseBrick = bricks[collapsedAt];
@@ -169,7 +191,7 @@ export default class GameCanvas extends React.Component {
   }
 
   render () {
-    this.renderBrickList();
+    // this.renderBrickList();
 
     let win = '';
     if(this.state.celebrate) {
