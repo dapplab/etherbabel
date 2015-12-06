@@ -213,7 +213,7 @@ export default class GameCanvas extends React.Component {
       win = <div className="win animated infinite swing"><p>You just won <b>{ (Number(this.state.collapsedAmount)/1000000000000000000).toLocaleString() }</b> coins. </p></div>;
       setTimeout(() => {
         this.setState({ celebrate: false });
-      }, 15000);
+      }, 40000);
     }
 
     let loader = '';

@@ -2,7 +2,11 @@ import Web3               from 'web3';
 import babelABI           from './../babel-abi';
 
 const BabelConfig = {
+<<<<<<< HEAD
   sandboxId: "83113d42a0e3ade40d52d6f15037ca16f49a569c",
+=======
+  sandboxId: "4ec3aba4c41b2af3a92b4b3a6ac598ae474d3ecf",
+>>>>>>> change timeout set, celebrate lasts as music playing time.
   babelAddress: '0x17956ba5f4291844bc25aedb27e69bc11b5bda39',
   gamerAddress: '0xdedb49385ad5b94a16f236a6890cf9e0b1e30392',
   providerUrl: 'http://babel.on.ether.camp:8555/sandbox/'
