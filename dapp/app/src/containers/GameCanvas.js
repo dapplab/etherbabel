@@ -99,7 +99,12 @@ export default class GameCanvas extends React.Component {
     babel.Collapse('latest', this.collapseCallback.bind(this));
   }
 
-  handleClick() {
+  handleClick(e) {
+    let ele = e.target;
+    ele.disabled = true;
+    setTimeout(() => {
+      ele.disabled = false;
+    }, 5000);
     this.setState({ loading: true, action: null });
     this.babel.addBrick({
         from: this.babelStore.gamerAddress,
@@ -117,13 +122,13 @@ export default class GameCanvas extends React.Component {
 
     for(let j = from + 1; j < bricks.length; j++) {
       Body.setInertia(bricks[j], 0.1);
-      Body.setPosition(bricks[j], { x: collapseBrick.position.x+Common.choose([-50,-50]), y: canvasHeight - collapsedAt*20 });
+      Body.setPosition(bricks[j], { x: collapseBrick.position.x+Common.choose([200,-200]), y: canvasHeight - collapsedAt*20 });
     }
 
     //clear collapesed bricks
     setTimeout(() => {
       World.remove(engine.world, bricks.slice(collapsedAt));
-    }, 3000);
+    }, 2000);
   }
 
   componentDidMount() {

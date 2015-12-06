@@ -49,6 +49,9 @@ body {
     padding: 8px 20px;
     margin: 1em 0;
     border-radius: 5px;
+    &:disabled {
+      background: #aaa;
+    }
   }
 }
 
