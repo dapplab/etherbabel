@@ -130,20 +130,20 @@ function getBricks() {
 function getBricksFromOffsets() {
     var bricks = [];
 
-    var offsets = babel.getOffsets();
-    console.log(offsets);
+    var offsets = babel.getOffsets({ from: gamerAddress });
+    console.log("offsets", offsets);
 
     return bricks;
 }
 
 function init() {
-    window.bricks = getBricksFromOffsets();
+    window.bricks = getBricks();
     console.log("Bricks loaded.");
 
     renderDemo(window.bricks);
 }
 
-var sandboxId = "518209475f37d9f657559446f81e1aa3fb6cab3c";
+var sandboxId = "7596340da377ad53d047fdfc9929ce4a0080dc3f";
 var babelAddress = '0x17956ba5f4291844bc25aedb27e69bc11b5bda39';
 var gamerAddress = '0xdedb49385ad5b94a16f236a6890cf9e0b1e30392';
 
@@ -160,7 +160,7 @@ $(function() {
     init();
 
     $('#add-brick').on('click', function() {
-        babel.addBrick({
+        babel.addBrick('', {
             from: gamerAddress,
             value: brickPrice,
         });

@@ -1,225 +1,331 @@
-window.babelABI = [{
-    "constant": false,
-    "inputs": [],
-    "name": "nameRegAddress",
-    "outputs": [{
-        "name": "",
-        "type": "address"
-    }],
-    "type": "function"
-}, {
-    "constant": true,
-    "inputs": [],
-    "name": "count",
-    "outputs": [{
-        "name": "",
-        "type": "uint256"
-    }],
-    "type": "function"
-}, {
-    "constant": false,
-    "inputs": [],
-    "name": "top18",
-    "outputs": [],
-    "type": "function"
-}, {
-    "constant": false,
-    "inputs": [],
-    "name": "kill",
-    "outputs": [],
-    "type": "function"
-}, {
-    "constant": true,
-    "inputs": [{
-        "name": "",
-        "type": "uint256"
-    }],
-    "name": "bricks",
-    "outputs": [{
-        "name": "id",
-        "type": "uint256"
-    }, {
-        "name": "from",
-        "type": "address"
-    }, {
-        "name": "value",
-        "type": "uint256"
-    }, {
-        "name": "offset",
-        "type": "int32"
-    }],
-    "type": "function"
-}, {
-    "constant": true,
-    "inputs": [],
-    "name": "brickV",
-    "outputs": [{
-        "name": "",
-        "type": "uint256"
-    }],
-    "type": "function"
-}, {
-    "constant": true,
-    "inputs": [],
-    "name": "accumCount",
-    "outputs": [{
-        "name": "",
-        "type": "uint256"
-    }],
-    "type": "function"
-}, {
-    "constant": false,
-    "inputs": [{
-        "name": "name",
-        "type": "bytes32"
-    }],
-    "name": "named",
-    "outputs": [{
-        "name": "",
-        "type": "address"
-    }],
-    "type": "function"
-}, {
-    "constant": false,
-    "inputs": [{
-        "name": "newOwner",
-        "type": "address"
-    }],
-    "name": "changeOwner",
-    "outputs": [],
-    "type": "function"
-}, {
-    "constant": true,
-    "inputs": [],
-    "name": "brickD",
-    "outputs": [{
-        "name": "",
-        "type": "int32"
-    }],
-    "type": "function"
-}, {
-    "constant": false,
-    "inputs": [],
-    "name": "getOffsets",
-    "outputs": [{
-        "name": "",
-        "type": "int32[1024]"
-    }],
-    "type": "function"
-}, {
-    "constant": false,
-    "inputs": [],
-    "name": "addBrick",
-    "outputs": [],
-    "type": "function"
-}, {
-    "constant": true,
-    "inputs": [],
-    "name": "clearThreshold",
-    "outputs": [{
-        "name": "",
-        "type": "uint256"
-    }],
-    "type": "function"
-}, {
-    "inputs": [],
-    "type": "constructor"
-}, {
-    "anonymous": false,
-    "inputs": [{
-        "indexed": true,
-        "name": "id",
-        "type": "uint256"
-    }, {
-        "indexed": true,
-        "name": "from",
-        "type": "address"
-    }, {
-        "indexed": true,
-        "name": "height",
-        "type": "uint256"
-    }, {
-        "indexed": false,
-        "name": "offset",
-        "type": "int32"
-    }, {
-        "indexed": false,
-        "name": "message",
-        "type": "string"
-    }],
-    "name": "AddBrick",
-    "type": "event"
-}, {
-    "anonymous": false,
-    "inputs": [{
-        "indexed": true,
-        "name": "id",
-        "type": "uint256"
-    }, {
-        "indexed": true,
-        "name": "collapsedAt",
-        "type": "uint256"
-    }, {
-        "indexed": true,
-        "name": "account",
-        "type": "address"
-    }, {
-        "indexed": false,
-        "name": "amount",
-        "type": "uint256"
-    }, {
-        "indexed": false,
-        "name": "height",
-        "type": "uint256"
-    }],
-    "name": "Collapse",
-    "type": "event"
-}, {
-    "anonymous": false,
-    "inputs": [{
-        "indexed": true,
-        "name": "count",
-        "type": "uint256"
-    }],
-    "name": "Accumulate",
-    "type": "event"
-}, {
-    "anonymous": false,
-    "inputs": [{
-        "indexed": true,
-        "name": "id",
-        "type": "uint256"
-    }, {
-        "indexed": true,
-        "name": "receiver",
-        "type": "address"
-    }, {
-        "indexed": true,
-        "name": "amount",
-        "type": "uint256"
-    }],
-    "name": "Clearing",
-    "type": "event"
-}, {
-    "anonymous": false,
-    "inputs": [{
-        "indexed": true,
-        "name": "receiver",
-        "type": "address"
-    }, {
-        "indexed": true,
-        "name": "amount",
-        "type": "uint256"
-    }],
-    "name": "Withdraw",
-    "type": "event"
-}, {
-    "anonymous": false,
-    "inputs": [{
-        "indexed": false,
-        "name": "values",
-        "type": "uint256[18]"
-    }],
-    "name": "Top18",
-    "type": "event"
-}];
+window.babelABI = [
+    {
+      "type" : "function",
+      "outputs" : [
+         {
+            "type" : "address",
+            "name" : ""
+         }
+      ],
+      "name" : "nameRegAddress",
+      "constant" : false,
+      "inputs" : []
+   },
+   {
+      "type" : "function",
+      "outputs" : [
+         {
+            "name" : "",
+            "type" : "uint256"
+         }
+      ],
+      "name" : "count",
+      "constant" : true,
+      "inputs" : []
+   },
+   {
+      "inputs" : [],
+      "name" : "disable",
+      "constant" : false,
+      "outputs" : [],
+      "type" : "function"
+   },
+   {
+      "outputs" : [
+         {
+            "name" : "",
+            "type" : "int32"
+         }
+      ],
+      "type" : "function",
+      "inputs" : [],
+      "name" : "stablizer",
+      "constant" : true
+   },
+   {
+      "outputs" : [],
+      "type" : "function",
+      "inputs" : [],
+      "name" : "top18",
+      "constant" : false
+   },
+   {
+      "type" : "function",
+      "outputs" : [],
+      "constant" : false,
+      "name" : "kill",
+      "inputs" : []
+   },
+   {
+      "type" : "function",
+      "outputs" : [
+         {
+            "type" : "int32[1024]",
+            "name" : "offset"
+         }
+      ],
+      "name" : "getOffsets",
+      "constant" : false,
+      "inputs" : []
+   },
+   {
+      "name" : "bricks",
+      "constant" : true,
+      "inputs" : [
+         {
+            "name" : "",
+            "type" : "uint256"
+         }
+      ],
+      "type" : "function",
+      "outputs" : [
+         {
+            "name" : "id",
+            "type" : "uint256"
+         },
+         {
+            "type" : "address",
+            "name" : "from"
+         },
+         {
+            "name" : "value",
+            "type" : "uint256"
+         },
+         {
+            "type" : "int32",
+            "name" : "offset"
+         },
+         {
+            "name" : "message",
+            "type" : "string"
+         }
+      ]
+   },
+   {
+      "name" : "brickV",
+      "constant" : true,
+      "inputs" : [],
+      "type" : "function",
+      "outputs" : [
+         {
+            "type" : "uint256",
+            "name" : ""
+         }
+      ]
+   },
+   {
+      "outputs" : [],
+      "type" : "function",
+      "inputs" : [
+         {
+            "name" : "m",
+            "type" : "string"
+         }
+      ],
+      "constant" : false,
+      "name" : "addBrick"
+   },
+   {
+      "constant" : true,
+      "name" : "accumCount",
+      "inputs" : [],
+      "type" : "function",
+      "outputs" : [
+         {
+            "name" : "",
+            "type" : "uint256"
+         }
+      ]
+   },
+   {
+      "outputs" : [
+         {
+            "name" : "",
+            "type" : "address"
+         }
+      ],
+      "type" : "function",
+      "inputs" : [
+         {
+            "name" : "name",
+            "type" : "bytes32"
+         }
+      ],
+      "name" : "named",
+      "constant" : false
+   },
+   {
+      "outputs" : [],
+      "type" : "function",
+      "inputs" : [
+         {
+            "type" : "address",
+            "name" : "newOwner"
+         }
+      ],
+      "name" : "changeOwner",
+      "constant" : false
+   },
+   {
+      "outputs" : [
+         {
+            "name" : "",
+            "type" : "int32"
+         }
+      ],
+      "type" : "function",
+      "inputs" : [],
+      "name" : "brickD",
+      "constant" : true
+   },
+   {
+      "constant" : false,
+      "name" : "addBrick",
+      "inputs" : [],
+      "type" : "function",
+      "outputs" : []
+   },
+   {
+      "type" : "function",
+      "outputs" : [
+         {
+            "type" : "uint256",
+            "name" : ""
+         }
+      ],
+      "name" : "clearThreshold",
+      "constant" : true,
+      "inputs" : []
+   },
+   {
+      "inputs" : [],
+      "type" : "constructor"
+   },
+   {
+      "type" : "event",
+      "anonymous" : false,
+      "name" : "AddBrick",
+      "inputs" : [
+         {
+            "type" : "uint256",
+            "indexed" : true,
+            "name" : "id"
+         },
+         {
+            "type" : "address",
+            "indexed" : true,
+            "name" : "from"
+         },
+         {
+            "type" : "uint256",
+            "indexed" : true,
+            "name" : "height"
+         },
+         {
+            "type" : "int32",
+            "indexed" : false,
+            "name" : "offset"
+         },
+         {
+            "name" : "message",
+            "indexed" : false,
+            "type" : "string"
+         }
+      ]
+   },
+   {
+      "anonymous" : false,
+      "type" : "event",
+      "name" : "Collapse",
+      "inputs" : [
+         {
+            "indexed" : true,
+            "type" : "uint256",
+            "name" : "id"
+         },
+         {
+            "type" : "uint256",
+            "indexed" : true,
+            "name" : "collapsedAt"
+         },
+         {
+            "type" : "address",
+            "indexed" : true,
+            "name" : "account"
+         },
+         {
+            "indexed" : false,
+            "type" : "uint256",
+            "name" : "amount"
+         },
+         {
+            "indexed" : false,
+            "type" : "uint256",
+            "name" : "height"
+         }
+      ]
+   },
+   {
+      "type" : "event",
+      "anonymous" : false,
+      "name" : "Accumulate",
+      "inputs" : [
+         {
+            "name" : "count",
+            "type" : "uint256",
+            "indexed" : true
+         }
+      ]
+   },
+   {
+      "name" : "Clearing",
+      "inputs" : [
+         {
+            "indexed" : true,
+            "type" : "uint256",
+            "name" : "id"
+         },
+         {
+            "indexed" : true,
+            "type" : "address",
+            "name" : "receiver"
+         },
+         {
+            "name" : "amount",
+            "indexed" : true,
+            "type" : "uint256"
+         }
+      ],
+      "anonymous" : false,
+      "type" : "event"
+   },
+   {
+      "inputs" : [
+         {
+            "name" : "receiver",
+            "indexed" : true,
+            "type" : "address"
+         },
+         {
+            "name" : "amount",
+            "type" : "uint256",
+            "indexed" : true
+         }
+      ],
+      "name" : "Withdraw",
+      "type" : "event",
+      "anonymous" : false
+   },
+   {
+      "anonymous" : false,
+      "type" : "event",
+      "inputs" : [
+         {
+            "name" : "values",
+            "type" : "uint256[18]",
+            "indexed" : false
+         }
+      ],
+      "name" : "Top18"
+   }
+]
