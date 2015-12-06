@@ -79,13 +79,13 @@ export default class GameCanvas extends React.Component {
     let bricks = this.state.bricks.slice(0, obj.collapsedAt+1);
     this.setState({ bricks: bricks, action: 'collapse', from: obj.collapsedAt, win: obj, collapsedAmount: obj.amount, celebrate: this.babelStore.donatedByU(obj.account), loading: false });
     console.log("Collapsed!", this.babelStore.donatedByU(obj.account), obj);
-    this.setState({ action: null })
+    this.setState({ action: null });    
   }
 
   addBrick(brick) {
     let bricks = this.state.bricks;
     bricks.push(brick);
-    this.setState({ action: 'addBrick', addedBrick: brick, bricks: bricks, celebrate: false, loading: false });
+    this.setState({ action: 'addBrick', addedBrick: brick, bricks: bricks, loading: false });
     console.log("AddBrick", brick);
     this.setState({ addedBrick: null, action: null });
   }
@@ -204,6 +204,9 @@ export default class GameCanvas extends React.Component {
     let win = '';
     if(this.state.celebrate) {
       win = <div className="win animated infinite swing"><p>You just won <b>{ (Number(this.state.collapsedAmount)/1000000000000000000).toLocaleString() }</b> coins. </p></div>;
+      setTimeout(() => {
+        this.setState({ celebrate: false });
+      }, 15000);
     }
 
     return (
