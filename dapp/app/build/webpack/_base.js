@@ -81,6 +81,7 @@ const webpackConfig = {
       { test: /\.eot(\?.*)?$/,   loader: "file-loader?prefix=fonts/&name=[path][name].[ext]" },
       { test: /\.svg(\?.*)?$/,   loader: "url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=image/svg+xml" },
       { test: /\.(png|jpg|woff|woff2|eot|ttf|svg|gif)/, loader: 'file?limit=5000000' },
+      { test: /favicon\.ico$/,   loader: 'file-loader?name=[name].[ext]' },
       /* eslint-enable */
       { test: /\.json$/, loader: "json-loader" },
       { test: /\.css$/, loader: "style-loader!css-loader" }
